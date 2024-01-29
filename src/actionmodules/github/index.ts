@@ -1,4 +1,5 @@
-import { IntegrationInterface } from "../interfaces";
+import { ActionInterface, IntegrationInterface } from "../interfaces";
+import { GithubCloseCommit } from "./actions/closecommit";
 export class GithubIntegration implements IntegrationInterface {
     nodeProperties = {
         name: "Github",
@@ -8,6 +9,10 @@ export class GithubIntegration implements IntegrationInterface {
 
     constructor(){
     }
-    actions = [GithubCloseCommit];
+
+
+    actions: ActionInterface[] = [new GithubCloseCommit()];
+
+
 
 }
