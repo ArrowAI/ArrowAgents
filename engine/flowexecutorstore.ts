@@ -1,17 +1,23 @@
 import { DB } from "../services/db";
 
-export type FlowExecutorObject= {
-    context : object;
-    currentNodeId :string;
+export type FlowState = {
+    context: object;
+    currentNodeId: string;
 }
 
 export class flowExecutorStore {
-  
-    findFlowExecutor(flowId: string): FlowExecutorObject {
-        if(DB.getFlowExecutorStoreValue(flowId)) {
-            return new FlowExecutorObject;
+
+    findFlowExecutor(flowId: string): FlowState {
+        let flowState = DB.getFlowExecutorStoreValue(flowId);
+        if (DB.getFlowExecutorStoreValue(flowId)) {
+            return flowState as FlowState;
         }
-        else
-            return new FlowExecutorObject;
+        else {
+            return {
+                context: {},
+                currentNodeId: ""
+            } as FlowState
+        }
+
     }
 }

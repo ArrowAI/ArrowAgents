@@ -1,4 +1,4 @@
-import { FlowExecutorObject, flowExecutorStore } from "../engine/flowexecutorstore";
+import { FlowState } from "../engine/flowexecutorstore";
 import { ActionExecutor } from "../execution/actionexecute";
 import { FlowJson } from "../execution/interfaces";
 import { IntegrationInterface } from "../actionmodules/interfaces";
@@ -14,8 +14,11 @@ export const DB = {
         //here it will get the details of the executor for the Action.
     },
 
-    getFlowExecutorStoreValue(flowId: string): flowExecutorStore {
-        return {} as flowExecutorStore
+    getFlowExecutorStoreValue(flowId: string): FlowState {
+        return {
+            context:{},
+            currentNodeId:""
+        } as FlowState
     }
 
 }

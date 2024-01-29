@@ -1,4 +1,4 @@
-import { FlowExecutorObject, flowExecutorStore } from "./flowexecutorstore";
+import { FlowState, flowExecutorStore } from "./flowexecutorstore";
 import {FlowExecuteHandler } from "../execution/flowexecute"
 const flowExecuteHandler = new FlowExecuteHandler();
 export class Engine{
@@ -7,7 +7,7 @@ export class Engine{
         this.ArrowFlowExecutorStore = new flowExecutorStore();
     }
     execute(flowId: string, context?) {
-        let flowExecutor: FlowExecutorObject;
+        let flowExecutor: FlowState;
         if (!context) {
             flowExecutor = this.ArrowFlowExecutorStore.findFlowExecutor(flowId);
         }

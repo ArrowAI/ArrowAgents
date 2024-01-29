@@ -3,7 +3,7 @@ import { ExecutionType, FlowJson } from "./interfaces";
 
 import {DB} from './../services/db'
 import { IntegrationInterface } from "../actionmodules/interfaces";
-import { FlowExecutorObject } from "../engine/flowexecutorstore";
+import { FlowState } from "../engine/flowexecutorstore";
 export class FlowExecuteHandler {
     constructor(){
     
@@ -13,7 +13,7 @@ export class FlowExecuteHandler {
         const currentNode = nodes[0]; // filter current node from nodes
         return currentNode;
     } 
-    execute(FlowExecutorObject: FlowExecutorObject,flowId: string) {
+    execute(FlowExecutorObject: FlowState,flowId: string) {
         const flow: FlowJson = DB.getFlow(flowId);
         // var mainjson = flow.flowgraph.main;   
         const nodes: IntegrationInterface[] = flow.nodes;
