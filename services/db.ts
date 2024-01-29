@@ -1,21 +1,21 @@
-import { flowExecutorStore } from "../engine/flowexecutorstore";
+import { FlowExecutorObject, flowExecutorStore } from "../engine/flowexecutorstore";
+import { ActionExecutor } from "../execution/actionexecute";
+import { FlowJson } from "../execution/interfaces";
+import { IntegrationInterface } from "../actionmodules/interfaces";
 
-export const  DB = {
-    getFlow(id:string): FlowJson{
+export const DB = {
+    getFlow(id: string): FlowJson {
         return {
             nodes: []
         }
     },
-    getActionExecutor(actionId:string) {
-
-        return new ActionExecutor(actionId);
+    getActionExecutor(node: IntegrationInterface): ActionExecutor {
+        return new ActionExecutor(node);
         //here it will get the details of the executor for the Action.
     },
 
-    getFlowExecutorStoreValue(flowId: string):flowExecutorStore{
-        return {
-            
-        }
+    getFlowExecutorStoreValue(flowId: string): flowExecutorStore {
+        return {} as flowExecutorStore
     }
 
 }

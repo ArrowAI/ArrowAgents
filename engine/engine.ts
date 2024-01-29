@@ -1,6 +1,6 @@
-import { flowExecutorStore } from "./flowexecutorstore";
+import { FlowExecutorObject, flowExecutorStore } from "./flowexecutorstore";
 import {FlowExecuteHandler } from "../execution/flowexecute"
-
+const flowExecuteHandler = new FlowExecuteHandler();
 export class Engine{
     ArrowFlowExecutorStore: flowExecutorStore;
     constructor(){
@@ -8,16 +8,16 @@ export class Engine{
     }
     execute(flowId: string, context?) {
         let flowExecutor: FlowExecutorObject;
-        if(!context)
-        {
+        if (!context) {
             flowExecutor = this.ArrowFlowExecutorStore.findFlowExecutor(flowId);
         }
         else {
             flowExecutor = context
         }
-        
-        FlowExecuteHandler.execute(flowExecutor);
+       
+        flowExecuteHandler.execute(flowExecutor,flowId);
     }
+
 
     //This is the Function that is called every minute, so that it can check for triggers and any delay functions
     executeStep(){
