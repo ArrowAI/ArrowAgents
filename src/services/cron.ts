@@ -10,6 +10,7 @@ export class CronService {
     }
     start(){
         new CronJob('*/1 * * * * *', () => {
+            console.log("running cron every sec");
             this.engine.executeStep();
         }).start();
     }
