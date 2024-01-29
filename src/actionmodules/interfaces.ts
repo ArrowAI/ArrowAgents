@@ -8,7 +8,7 @@ export interface IActionProperties{
 }
 export interface ActionInterface {
     actionProperties: IActionProperties;
-    actionId:string
+    actionId?:string
     execute?(context:IContext): void;
 }
 

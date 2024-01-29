@@ -20,7 +20,8 @@ export class FlowExecuteHandler {
         const currentNode = this.getCurrentNode(nodes); //instead of getCurrentNode use iterate graph
         const actionExecutor = DB.getActionExecutor(currentNode);
         // get executon Type from environment variable
-        return actionExecutor.execute(currentNode.actions[0].actionId);
+
+        return actionExecutor.execute(currentNode.actions[0].actionId!);
         
     }
 

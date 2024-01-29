@@ -12,8 +12,10 @@ export class BlueprintNode {
     execute(context: object) {
 
     }
-    baseClassName: string;
-    graph: object;
+    baseClassName: string = "";
+
+    graph: object | undefined;
+
     inputs: IBlueprintVariableDef[] = [{"name": "a", "typeName": "String"}];
     outputs = [];
 }
