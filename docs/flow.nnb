@@ -1,0 +1,46 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "Code for Integration"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "export interface IActionProperties{\n    name: string;\n    description: string;\n    icon: string;\n}\nexport interface IContext {\n    pastValues: [];\n}\nexport interface ActionInterface {\n    actionProperties: IActionProperties;\n    execute?(context:IContext): void;\n}\nexport interface INodeProperties{\n    name: string;\n    description: string;\n    icon: string;\n\n}\n\nexport interface IntegrationInterface {\n    nodeProperties: INodeProperties;\n    actions: ActionInterface[];\n}\n\n\n\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "These are the Integration and Action Details. This is how your module will be made"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { IntegrationInterface, ActionInterface } from \"./flow.nnb#W5sZmlsZQ==\";\n\nexport class GithubCloseCommit extends ActionInterface {\n    constructor(){\n        super();\n    }\n    actionProperties = {\n        name: \"GithubCloseCommit\",\n        description: \"GithubCloseCommit\",\n        icon: \"githubicon.svg\"\n    }\n    execute(context){\n        console.log(\"GithubCloseCommit\");\n    }\n    data(){\n\n    }\n}\n\nexport class GithubIntegration extends IntegrationInterface {\n    nodeProperties = {\n        name: \"Github\",\n        description: \"Github\",\n        icon: \"githubicon.svg\"\n    }\n\n    constructor(){\n        super();\n    }\n    actions = [GithubCloseCommit];\n\n}"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { IntegrationInterface } from \"./flow.nnb#W1sZmlsZQ==\";\n\nexport type FlowJson= {\n    nodes: IntegrationInterface[]\n}\nexport enum ExecutionType{\n    local='local',\n    remoteExecutor='remoteExecutor'\n}\nexport interface IAgentDetail{\n    agentName: string;\n    agentDescription: string;\n    agentId: string;\n}\nexport type ActionExecutorType = {\n    executionType: ExecutionType;\n    executionUrl? : string;\n\n}\n\n\nexport class DB{\n    getFlow(id:string): FlowJson{\n        return {\n            nodes: []\n        }\n    }\n    getActionExecutor(actionId:string) {\n\n        return new ActionExecutor(actionId);\n        //here it will get the details of the executor for the Action.\n    }\n\n}\n\nexport class FlowExecutor {\n    db: DB;\n    constructor(){\n        this.db = new DB();\n    }\n   \n    getCurrentNode(nodes: IntegrationInterface[]) {\n        const currentNode = nodes[0]; // filter current node from nodes\n        return currentNode;\n    } \n    execute(flowId: string) {\n        const flow: FlowJson = this.db.getFlow(flowId);   \n        const nodes: IntegrationInterface[] = flow.nodes;\n        const currentNode = this.getCurrentNode(nodes);\n        const actionExecutor = this.db.getActionExecutor(currentNode);\n        // get executon Type from environment variable\n        return actionExecutor.execute(currentNode.actionId,ExecutionType.local);\n        \n    }\n}\n\nexport class ActionExecutor {\n    node: IntegrationInterface;\n    constructor(node: IntegrationInterface) {\n        this.node = node;\n    }\n   \n    execute(actionId: string) {\n       let ActionExecutorType = ExecutionType.local\n       // execute current node action\n        \n       \n    }\n}\n\nexport class BaseAgent {\n    AgentDetail: IAgentDetail;\n}\n\nexport class FlowAgent {\n    AgentDetail: IAgentDetail;\n    BaseAgentClass: BaseAgent;\n    FlowAgentJson: FlowJson;\n    \n}"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import { FlowExecutor } from \"./flow.nnb#X10sZmlsZQ==\";\n\nexport class Engine{\n    flowExecutor: FlowExecutor;\n    constructor(){\n        this.flowExecutor = new FlowExecutor();\n    }\n    execute(flowId: string){\n        this.flowExecutor.execute(flowId);\n        \n        \n        \n    }\n}"
+            ],
+            "outputs": []
+        }
+    ]
+}
