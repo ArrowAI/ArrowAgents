@@ -1,4 +1,4 @@
-import { DB } from "../services/db";
+import { DB } from "../services/flowservice";
 
 export type FlowState = {
     context: object;
@@ -7,9 +7,9 @@ export type FlowState = {
 
 export class flowExecutorStore {
 
-    findFlowExecutor(flowId: string): FlowState {
-        let flowState = DB.getFlowExecutorStoreValue(flowId);
-        if (DB.getFlowExecutorStoreValue(flowId)) {
+    async findFlowExecutor(flowId: string): Promise<FlowState>  {
+        let flowState = await DB.getFlowExecutorStoreValue(flowId);
+        if (flowState) {
             return flowState as FlowState;
         }
         else {

@@ -6,15 +6,14 @@ export class Engine{
     constructor(){
         this.ArrowFlowExecutorStore = new flowExecutorStore();
     }
-    execute(flowId: string, context?: any) {
+    async execute(flowId: string, context?: any) {
         let flowExecutor: FlowState;
         if (!context) {
-            flowExecutor = this.ArrowFlowExecutorStore.findFlowExecutor(flowId);
+            flowExecutor = await this.ArrowFlowExecutorStore.findFlowExecutor(flowId);
         }
         else {
             flowExecutor = context
         }
-
         flowExecuteHandler.execute(flowExecutor, flowId);
     }
 

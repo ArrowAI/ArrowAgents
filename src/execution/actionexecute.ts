@@ -1,9 +1,6 @@
 import {IntegrationInterface} from "../actionmodules/interfaces";
 import { ExecutionType } from "./interfaces";
 
-
-
-
 // This is used to execute a specific action. This is called by the flow Executor.
 
 export class ActionExecutor {
@@ -15,7 +12,5 @@ export class ActionExecutor {
     execute(actionId: string) {
        let ActionExecutorType = ExecutionType.local
        // execute current node action
-        
-       
     }
 }
