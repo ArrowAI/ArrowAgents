@@ -8,16 +8,25 @@ export type FlowState = {
 export class flowExecutorStore {
 
     async findFlowExecutor(flowId: string): Promise<FlowState>  {
-        let flowState = await DB.getFlowExecutorStoreValue(flowId);
-        if (flowState) {
-            return flowState as FlowState;
-        }
-        else {
+        try {
+            let flowState = await DB.getFlowExecutorStoreValue(flowId);
+            if (flowState) {
+                return flowState as FlowState;
+            }
+            else {
+                return {
+                    context: {},
+                    currentNodeId: ""
+                } as FlowState
+            }  
+        } catch (error) {
             return {
                 context: {},
                 currentNodeId: ""
-            } as FlowState
+            } as FlowState 
         }
+
+        
 
     }
 }

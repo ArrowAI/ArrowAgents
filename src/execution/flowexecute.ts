@@ -9,6 +9,7 @@ export class FlowExecuteHandler {
     constructor(){
     
     }
+    
     getFirstNode(nodes: IntegrationInterface[]): IntegrationInterface | undefined {
         return nodes.find(node => node.nodeProperties.name === 'customNode');
     }
