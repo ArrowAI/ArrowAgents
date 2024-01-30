@@ -24,7 +24,6 @@ export class FlowExecuteHandler {
 
     async iterateGraph(nodes: any[], connections: any[], executionState: FlowState) {
         //This will be called to iterate and process the graph. This will have logic to handle control node, data Node, Parallelization, Multi Server etc.
-
         let currentNode = nodes[0]; // start with the first node
         console.log(currentNode)
         let flowExecutionContext = executionState;
@@ -38,23 +37,19 @@ export class FlowExecuteHandler {
             for (const dataNode of connectedDataNodes) {
                 console.log(`Processing data node: ${dataNode.id}`);
                 const actionExecutor = DB.getActionExecutor(dataNode);
-
                 flowExecutionContext.context = await actionExecutor.execute(dataNode.actions[0].actionId!);
             }
 
             // process the current node
             console.log(`Processing ${currentNode.type} node: ${currentNode.id}`);
             const actionExecutor = DB.getActionExecutor(currentNode);
-
             flowExecutionContext.context = await actionExecutor.execute(currentNode.actions[0].actionId!);
-
             // find the next node in the graph
             const nextNode = connections.find(connection => connection.source === currentNode.id);
             if (!nextNode) {
                 // if there's no next node, we've reached the end of the graph
                 break;
             }
-
             // update the current node to the next node
             currentNode = nodes.find(node => node.id === nextNode.target);
         }
