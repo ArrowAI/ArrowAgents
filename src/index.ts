@@ -8,7 +8,7 @@ import { slaveservices } from "./services/slaveservices";
 dotenv.config();
 
 const engine = new Engine();
-if(!process.env.EXTERNAL_CRON){
+if(!process.env.EXTERNAL_CRON && process.env.SERVER_MODE == "master"){
     const cron = new CronService(engine);
     cron.start()
 }   
