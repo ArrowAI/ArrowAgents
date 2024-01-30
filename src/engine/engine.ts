@@ -14,8 +14,8 @@ export class Engine {
         else {
             flowExecutor = context
         }
-        let engineResponse = flowExecuteHandler.execute(flowExecutor, flowId);
-        console.log(engineResponse)
+        let engineResponse = await flowExecuteHandler.execute(flowExecutor, flowId);
+       
         return engineResponse
     }
 
