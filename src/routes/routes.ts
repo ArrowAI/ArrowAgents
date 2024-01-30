@@ -28,7 +28,7 @@ else {
 }
 
 router.get('/run/:flowId', (req, res) => {
-    let response = engine.execute(req.params.flowId);
+    let response = engine.executeFlow(req.params.flowId);
     res.json(response);
 });
 

@@ -6,7 +6,7 @@ export class Engine {
     constructor() {
         this.ArrowFlowExecutorStore = new flowExecutorStore();
     }
-    async execute(flowId: string, context?: any) {
+    async executeFlow(flowId: string, context?: any) {
         let flowExecutor: FlowState;
         if (!context) {
             flowExecutor = await this.ArrowFlowExecutorStore.findFlowExecutor(flowId);

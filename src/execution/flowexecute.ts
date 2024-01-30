@@ -1,55 +1,65 @@
 import { ExecutionType, FlowJson } from "./interfaces";
 
 
-import { DB } from '../services/flowservice'
+import { DB } from './../services/flowservice'
 import { IntegrationInterface } from "../actionmodules/interfaces";
 import { FlowState } from "../engine/flowexecutorstore";
-import { executeFlow } from "@src/helper/flowHelper";
-
 export class FlowExecuteHandler {
     constructor() {
 
     }
 
-    getFirstNode(connections: any) {
-
-        return connections[0].source;
-
+    getCurrentNode(nodes: IntegrationInterface[]) {
+        const currentNode = nodes[0]; // filter current node from nodes
+        return currentNode;
     }
+    execute(executionState: FlowState, flowId: string) {
 
-
-    getNextNodeToExecute(connections: any, currentNodeId: string) {
-        let nextNodeToExecute = connections.find((connection: any) => connection.source === currentNodeId);
-        if (nextNodeToExecute) {
-            return nextNodeToExecute.target;
-        }
-        else {
-            return null;
-        }
-    }
-
-
-    execute(flowexecuteState: FlowState, flowId: string) {
         const flow: any = DB.getFlow(flowId);
-        return executeFlow(flow, flowexecuteState.context);
-        // var mainjson = flow.flowgraph.main;   
-        //TODO change Nodes to type of IntegrationInterface
-        // const connections: any[] = flow.connections;
-        // let currentNodeId=this.getFirstNode(connections);
-        // const currentNodeToExecute = flow.nodes.find((node:any) => node.id === currentNodeId);  //instead of getCurrentNode use iterate graph
-        // const actionExecutor = DB.getActionExecutor(currentNodeToExecute!);
-        // // get executon Type from environment variable
-        // let actionResponse= actionExecutor.execute(currentNodeToExecute!.actions[0].actionId!);
-        // let connectedNode = this.getNextNodeToExecute(connections,currentNodeId);
-        // if(connectedNode!=null){
-
-        // }
-
-
+        const nodes: any[] = flow.nodes;
+        const connections: any[] = flow.connections;
+        return this.iterateGraph(nodes, connections, executionState);
     }
 
-    iterategraph() {
+    async iterateGraph(nodes: any[], connections: any[], executionState: FlowState) {
         //This will be called to iterate and process the graph. This will have logic to handle control node, data Node, Parallelization, Multi Server etc.
+        let currentNode = nodes[0]; // start with the first node
+        let flowExecutionContext = executionState;
+        while (currentNode) {
+            // process the current node
+            console.log(`Processing ${currentNode.type} node: ${currentNode.id}`);
+            // process all data node connected to the current node before execution of current node
+            const connectedDataNodes = connections
+                .filter(connection => connection.source === currentNode.id)
+                .map(connection => nodes.find(node => node.id === connection.target))
+                .filter(node => node && node.type === 'data');
+            for (const dataNode of connectedDataNodes) {
+                console.log(`Processing data node: ${dataNode.id}`);
+                const actionExecutor = DB.getActionExecutor(dataNode);
+
+                flowExecutionContext.currentNodeId = dataNode.id;
+                flowExecutionContext.context = await actionExecutor.execute(dataNode.actions[0].actionId!);
+            }
+            const actionExecutor = DB.getActionExecutor(currentNode);
+            // get executon Type from environment variable
+
+            flowExecutionContext.currentNodeId = currentNode.id;
+            flowExecutionContext.context = await actionExecutor.execute(currentNode.actions[0].actionId!);
+            // find the next node in the graph
+            const nextNode = connections.find(connection => connection.source === currentNode.id);
+            if (!nextNode) {
+                // if there's no next node, we've reached the end of the graph
+                break;
+            }
+            // update the current node to the next node
+            currentNode = nodes.find(node => node.id === nextNode.target);
+        }
+        console.log('Workflow execution complete.');
+        return flowExecutionContext;
+
+
         // This will also call Subgraph for other functions or even call secondary nodes like orchestrators etc.
     }
+
+
 }
