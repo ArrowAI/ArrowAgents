@@ -11,6 +11,10 @@ export class ActionExecutor {
    
     execute(actionId: string) {
        let ActionExecutorType = ExecutionType.local
+
+       return {
+          nodeStatus: "success",
+       }
        // execute current node action
     }
 }

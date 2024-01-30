@@ -7,10 +7,56 @@ import FlowExecutorStoreModel from "../database/models/FlowExecutorStoreModel";
 const flowExecutorRepository = AppDataSource.getRepository(FlowExecutorStoreModel)
 
 export const DB = {
-    getFlow(id: string): FlowJson {
-        return {
-            nodes: []
+    getFlow(id: string): any {
+        let flow = {
+            name: "tetFlwo",
+            type: "BaseAgent",
+            nodes: [{
+                id: "conversationalChain0",
+                name: "Conversational Chain",
+                type: "langchain.chain",
+                properties: {
+
+                },
+                actions: [{
+                    actionId: "action0",
+                    actionType: "langchain.action",
+                    actionProperties: {
+                        name: "action0",
+                        description: "action0",
+                        icon: "githubicon.svg"
+                    }
+                }]
+            },
+            {
+                id: "switch0",
+                name: "Switch",
+                type: "switch",
+                properties: {
+
+                },
+                actions: [{
+                    actionId: "action0",
+                    actionType: "switch0.action",
+                    actionProperties: {
+                        name: "action0",
+                        description: "action0",
+                        icon: "githubicon.svg"
+                    }
+                }]
+            },
+
+            ],
+            connections: [
+
+                {
+                    source: "conversationalChain0",
+                    target: "switch0"
+                }
+
+            ]
         }
+        return flow;
     },
     getActionExecutor(node: IntegrationInterface): ActionExecutor {
         return new ActionExecutor(node);

@@ -1,31 +1,54 @@
 import { ExecutionType, FlowJson } from "./interfaces";
 
 
-import {DB} from '../services/flowservice'
+import { DB } from '../services/flowservice'
 import { IntegrationInterface } from "../actionmodules/interfaces";
 import { FlowState } from "../engine/flowexecutorstore";
+import { executeFlow } from "@src/helper/flowHelper";
 
 export class FlowExecuteHandler {
-    constructor(){
-    
-    }
-    
-    getFirstNode(nodes: IntegrationInterface[]): IntegrationInterface | undefined {
-        return nodes.find(node => node.nodeProperties.name === 'customNode');
+    constructor() {
+
     }
 
-    execute(flowexecuteState: FlowState,flowId: string) {
-        const flow: FlowJson = DB.getFlow(flowId);
+    getFirstNode(connections: any) {
+
+        return connections[0].source;
+
+    }
+
+
+    getNextNodeToExecute(connections: any, currentNodeId: string) {
+        let nextNodeToExecute = connections.find((connection: any) => connection.source === currentNodeId);
+        if (nextNodeToExecute) {
+            return nextNodeToExecute.target;
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    execute(flowexecuteState: FlowState, flowId: string) {
+        const flow: any = DB.getFlow(flowId);
+        return executeFlow(flow, flowexecuteState.context);
         // var mainjson = flow.flowgraph.main;   
-        const nodes: IntegrationInterface[] = flow.nodes;
-        const currentNode = this.getFirstNode(nodes); //instead of getCurrentNode use iterate graph
-        const actionExecutor = DB.getActionExecutor(currentNode!);
-        // get executon Type from environment variable
-        return actionExecutor.execute(currentNode!.actions[0].actionId!);
-        
+        //TODO change Nodes to type of IntegrationInterface
+        // const connections: any[] = flow.connections;
+        // let currentNodeId=this.getFirstNode(connections);
+        // const currentNodeToExecute = flow.nodes.find((node:any) => node.id === currentNodeId);  //instead of getCurrentNode use iterate graph
+        // const actionExecutor = DB.getActionExecutor(currentNodeToExecute!);
+        // // get executon Type from environment variable
+        // let actionResponse= actionExecutor.execute(currentNodeToExecute!.actions[0].actionId!);
+        // let connectedNode = this.getNextNodeToExecute(connections,currentNodeId);
+        // if(connectedNode!=null){
+
+        // }
+
+
     }
 
-    iterategraph(){
+    iterategraph() {
         //This will be called to iterate and process the graph. This will have logic to handle control node, data Node, Parallelization, Multi Server etc.
         // This will also call Subgraph for other functions or even call secondary nodes like orchestrators etc.
     }

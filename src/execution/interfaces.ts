@@ -4,8 +4,20 @@ export interface IContext {
     pastValues: [];
 }
 
+
 export type FlowJson= {
-    nodes: IntegrationInterface[]
+    flowData: {
+        nodes: INode[],
+        edges: IEdege[]
+    };
+    // nodes: IntegrationInterface[]
+}
+
+export type INode={
+
+}
+export type IEdege={
+
 }
 export enum ExecutionType{
     local='local',
