@@ -1,8 +1,11 @@
 {
     "id": "00D5FaL7IUFHeTUuQob80",
-    "name": "Youtube Crew",
+    "name": "@crew/youtube-crew",
+    "label": "Youtube Crew",
+    "baseClass": "none",
     "functions": {
         "main": {
+            "override": false,
             "function_display_name": "Main Function",
             "flow": {
                 "nodes": [
@@ -114,20 +117,8 @@
             "function_display_name": "Add Two Numbers"
         }
     },
-    "classes": {
-        "MyAgent": {
-            "baseClass": "BaseAgent",
-            "functions": {
-                "execute": {
-                    "override": true,
-                    "inputs": [],
-                    "outputs": [],
-                    "flow": {
-                        "nodes": [],
-                        "edges": []
-                    }
-                }
-            }
-        }
-    }
+    "imported_classes": [
+        "@agent/agent1",
+        "@orchestrator/myorchestrator"
+    ]
 }
