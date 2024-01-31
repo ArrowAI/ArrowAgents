@@ -219,12 +219,14 @@
                         "sourceHandle": "conversationalAgent_0-output-control-default",
                         "target": "addnumbers",
                         "targetHandle": "addnumber-control0",
+                        "id":"conversationalAgent_0-output-control-default-addnumber-control0",
                         "type": "buttonedge"
                     },
                     {
                         "source": "addnumbers",
                         "sourceHandle": "addnumbers-output-addnumbers-number",
                         "target": "myagent",
+                        "id":"addnumbers-output-addnumbers-number-myagent-control0",
                         "targetHandle": "myagent-control0",
                         "type": "buttonedge"
                     },
@@ -232,6 +234,7 @@
                         "source": "addnumbers",
                         "sourceHandle": "addnumbers-output-addnumbers-number",
                         "target": "myagent",
+                        "id":"addnumbers-output-addnumbers-number-myagent-control0",
                         "targetHandle": "myagent-control0",
                         "type": "buttonedge"
                     }
