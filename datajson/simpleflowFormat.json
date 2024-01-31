@@ -2,7 +2,7 @@
     "id": "00D5FaL7IUFHeTUuQob80",
     "name": "@crew/youtube-crew",
     "label": "Youtube Crew",
-    "baseClass": "none",
+    "classType": "crew",
     "functions": {
         "main": {
             "override": false,
