@@ -195,6 +195,15 @@
                 ],
                 "edges": [
                     {
+                        "source":"start0",
+                        "sourceHandle": "start0-output-start0-Start",
+                        "target": "conversationalAgent_0",
+                        "targetHandle":"conversationalAgent_0-input-control-default",
+                        "type": "buttonedge",
+                        "id": "start0-conversationalAgent_0-input-control-default"
+                    },
+
+                    {
                         "source": "bufferMemory_0",
                         "sourceHandle": "bufferMemory_0-output-bufferMemory-BufferMemory|BaseChatMemory|BaseMemory",
                         "target": "conversationalAgent_0",
@@ -207,10 +216,24 @@
                     },
                     {
                         "source": "conversationalAgent_0",
-                        "sourceHandle": "conversationalAgent_0-output-conversationalAgent-AgentExecutor|BaseChain",
-                        "target": "bufferMemory_0",
-                        "targetHandle": "bufferMemory_0-input-memory-BaseChatMemory",
-                        "type": "buttonedge",
+                        "sourceHandle": "conversationalAgent_0-output-control-default",
+                        "target": "addnumbers",
+                        "targetHandle": "addnumber-control0",
+                        "type": "buttonedge"
+                    },
+                    {
+                        "source": "addnumbers",
+                        "sourceHandle": "addnumbers-output-addnumbers-number",
+                        "target": "myagent",
+                        "targetHandle": "myagent-control0",
+                        "type": "buttonedge"
+                    },
+                    {
+                        "source": "addnumbers",
+                        "sourceHandle": "addnumbers-output-addnumbers-number",
+                        "target": "myagent",
+                        "targetHandle": "myagent-control0",
+                        "type": "buttonedge"
                     }
                 ]
             }
