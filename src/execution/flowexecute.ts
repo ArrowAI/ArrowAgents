@@ -14,7 +14,6 @@ export class FlowExecuteHandler {
         return currentNode;
     }
     execute(executionState: FlowState, flowId: string) {
-
         const flow: any = DB.getFlow(flowId);
         const nodes: any[] = flow.nodes;
         const connections: any[] = flow.connections;

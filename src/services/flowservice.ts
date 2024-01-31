@@ -8,7 +8,7 @@ const flowExecutorRepository = AppDataSource.getRepository(FlowExecutorStoreMode
 
 export const DB = {
     getFlow(id: string): any {
-     
+
         let flow = {
             "name": "Example Workflow",
             "nodes": [

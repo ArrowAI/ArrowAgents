@@ -1,0 +1,27 @@
+{
+    "id": "00D5FaL7IUFHeTUuQob80",
+    "name": "Untitled flow test",
+    "isPublic": false,
+    "apikeyid": null,
+    "updated": "2023-09-05 10:06:59.487",
+    "flowData": {
+        "nodes": [
+            {
+                "flowUi": {},
+                "id": "00D5FaL7IUFHeTUuQob80",
+                "data": {
+                    "name": "conversationalAgent"
+                },
+                "settings": {}
+            }
+        ],
+        "edges": [
+            {}
+        ]
+    },
+    "created": "2023-09-05 10:06:15.000",
+    "updatedBy": "KSNSOBwgEZPE63aFBolea",
+    "valid": false,
+    "state": "DRAFT",
+    "status": "ENABLED"
+}
