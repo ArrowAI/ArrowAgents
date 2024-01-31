@@ -1,39 +1,16 @@
 {
     "id": "00D5FaL7IUFHeTUuQob80",
     "name": "Untitled flow test",
-    "deployed":false, 
-    "isPublic": false,
-    "apikeyid": null,
-    "updated": "2023-09-05 10:06:59.487",
-    "chatbotConfig": null, 
     "flowData": {
         "nodes": [
             {
-                "flowUi": {
-                    "type": "customNode",
-                    "width": 300,
-                    "height": 414,
-                    "position": {
-                        "x": 781.1193750000001,
-                        "y": 213.94281249999997
-                    },
-                    "positionAbsolute": {
-                        "x": 798.8356164383563,
-                        "y": 237.11986301369865
-                    },
-                    "selected": false,
-                    "dragging": false
-                },
                 "id": "conversationalAgent_0",
                 "data": {
                     "name": "trigger",
                     "label": "Webhook Trigger",
                     "type": "WEBHOOK",
-                    "version": 1,
                     "category": "Agents",
                     "valid": true,
-                    "description": "Conversational agent for a chat model. It will utilize chat specific prompts",
-                    "icon": "/usr/local/lib/node_modules/flowise/node_modules/flowise-components/dist/nodes/agents/ConversationalAgent/agent.svg",
                     "inputs": {
                         "tools": [
                             "{{calculator_0.data.instance}}"
@@ -107,31 +84,6 @@
                     "id": "conversationalAgent_0",
                     "selected": false
 
-                },
-                "settings": {
-                    "inputUiInfo": {
-                        "currentSelectedData": {
-                            "method": "GET",
-                            "headers": {
-                                "host": "localhost:3000",
-                                "connection": "keep-alive",
-                                "sec-ch-ua": "\"Chromium\";v=\"116\", \"Not)A;Brand\";v=\"24\", \"Google Chrome\";v=\"116\"",
-                                "sec-ch-ua-mobile": "?0",
-                                "sec-ch-ua-platform": "\"macOS\"",
-                                "upgrade-insecure-requests": "1",
-                                "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
-                                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-                                "sec-fetch-site": "none",
-                                "sec-fetch-mode": "navigate",
-                                "sec-fetch-user": "?1",
-                                "sec-fetch-dest": "document",
-                                "accept-encoding": "gzip, deflate, br",
-                                "accept-language": "en-GB,en-US;q=0.9,en;q=0.8,hi;q=0.7",
-                                "cookie": "rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX18vFT8rtGGhR%2FTuETCNqsNrXv3VdcmLdJc%3D; rl_page_init_referring_domain=RudderEncrypt%3AU2FsdGVkX19nzoh%2FOTb5CXKx9MPahVgJn6air7LqbZo%3D; n8n-auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVkYWExMzBkLThjNGEtNGQ5My04MmI5LTQzZWU4YTI1NjkxYiIsImVtYWlsIjoicmF2aUBhcnJvd2FpLmNvbSIsInBhc3N3b3JkIjoiM2M1MzVmY2ZkNDQ1OGZiZGFiODU0ZmViZjZjN2NiODNiZDc3ZWYyNjU1OGUyODljZmY2MjJhM2RjYWNjZmZhNCIsImlhdCI6MTY5MzgyMDIyOSwiZXhwIjoxNjk0NDI1MDI5fQ.6NCjYN4Au2hwZWSuzlOcwa6ROwRihboUiIdM7g9FFeA; rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX19mgtb9o%2Fb%2BpTIyPBMqS6Eg26bWPzqlxbmD2b0wElrcHM4ml09NOcn1lu6hyuBNZwGMrCgS8uBFgw%3D%3D; rl_group_id=RudderEncrypt%3AU2FsdGVkX19ZiThQzj94h2Ku%2Fmuw2rIT9on53rrpwdM%3D; rl_group_trait=RudderEncrypt%3AU2FsdGVkX180INCfXDjoBSEDAro%2B6PsItWRh6fktrQ0%3D; rl_user_id=RudderEncrypt%3AU2FsdGVkX185uVGwuqyJ%2BuPekYioXbz4welvRWjObgIE5C2Vka%2FG41p%2BStiGWwue9zTgS7rLaW7%2BAGId4en05incq4o0AuFWLiwqDglZeRuqqj%2FgVSYYZhPOOibeui%2FWKRQ3K5Ao%2B7HgyMoILG98CA5qphqSqdGd%2F%2FOUwyd2f5M%3D; rl_trait=RudderEncrypt%3AU2FsdGVkX1%2BcRCghki6B0WVVGUkkF6Ln5e5ctzw7mgOK8mNBw9%2BShoDxxshf3mekihJVcvydayOroDYxlttCjABrZuszt6YtVZhRA%2FjijLOvWJvbd5OlecIR%2Fn2MZS3XVAd%2BTJ01xaTNHgkeb99I1L92nIuTYNFhSS%2FE0Vry5Vk%3D; rl_session=RudderEncrypt%3AU2FsdGVkX19B6L3HpBxqud0VHITjDozntmLHrcI8oV027AS5Xu9Y7tgS4DPpkdt3opbpOhIxvQcSkhhRBUlLQoXTg0NUm2YXD5dDNvCZFlsvuLzKUdF7OyBNOBXgUaU%2BbWgRI0k6%2F2yMSOYb8SarZQ%3D%3D; ph_phc_4URIAm1uYfJO7j8kWSe0J8lc8IqnstRLS7Jx8NcakHo_posthog=%7B%22%24active_feature_flags%22%3A%5B%22013_distribution_test%22%2C%22011_ask_AI%22%2C%22012_signup_cta_wording%22%2C%22009_choosing_trial_plan%22%2C%22006_cloud_opt_in%22%2C%22010_relevant_usecase%22%2C%22schema-view%22%5D%2C%22%24enabled_feature_flags%22%3A%7B%22013_distribution_test%22%3A%22variant%22%2C%22011_ask_AI%22%3A%22gpt3%22%2C%22012_signup_cta_wording%22%3A%22variant%22%2C%22009_choosing_trial_plan%22%3A%22control%22%2C%22004_checklist%22%3Afalse%2C%22008_template_variants%22%3Afalse%2C%22006_cloud_opt_in%22%3A%22control%22%2C%22010_relevant_usecase%22%3A%22control%22%2C%22schema-view%22%3Atrue%7D%2C%22%24feature_flag_payloads%22%3A%7B%7D%2C%22distinct_id%22%3A%2232699b9087ea535740df813ca523726bef37df00d1d49b0d5bba75b66a8bf89a%23edaa130d-8c4a-4d93-82b9-43ee8a25691b%22%2C%22%24device_id%22%3A%22018a170f-8fd2-7ab1-aad9-0f1a9ed40933%22%2C%22%24user_state%22%3A%22identified%22%2C%22%24user_id%22%3A%2232699b9087ea535740df813ca523726bef37df00d1d49b0d5bba75b66a8bf89a%23edaa130d-8c4a-4d93-82b9-43ee8a25691b%22%2C%22%24stored_person_properties%22%3A%7B%22instance_id%22%3A%2232699b9087ea535740df813ca523726bef37df00d1d49b0d5bba75b66a8bf89a%22%2C%22created_at_timestamp%22%3A1692603716034%2C%22companyType%22%3A%22education%22%2C%22role%22%3A%22it%22%2C%22automationGoalDevops%22%3A%5B%22incident-response%22%5D%2C%22automationBeneficiary%22%3A%22myself%22%2C%22companySize%22%3A%22personalUser%22%2C%22reportedSource%22%3A%22google%22%2C%22version%22%3A%22v4%22%2C%22personalization_survey_submitted_at%22%3A%222023-08-24T05%3A39%3A14.983Z%22%2C%22personalization_survey_n8n_version%22%3A%221.1.1%22%7D%2C%22%24sesid%22%3A%5B1693823065165%2C%22018a5fb8-dc4d-77d4-a40d-b18b1c7a6ca9%22%2C1693823065165%5D%2C%22%24session_recording_enabled_server_side%22%3Atrue%2C%22%24console_log_recording_enabled_server_side%22%3Afalse%2C%22%24session_recording_recorder_version_server_side%22%3A%22v2%22%2C%22%24autocapture_disabled_server_side%22%3Afalse%7D"
-                            },
-                            "queryParams": {}
-                        }
-                    }
                 }
             },
             {
@@ -173,16 +125,6 @@
                     "label": ""
                 }
             }
-        ],
-        "viewport": {
-            "x": -37.84848484848476,
-            "y": -191.09292929292923,
-            "zoom": 0.8848484848484849
-        }
-    },
-    "created": "2023-09-05 10:06:15.000",
-    "updatedBy": "KSNSOBwgEZPE63aFBolea",
-    "valid": false,
-    "state": "DRAFT",
-    "status": "ENABLED"
+        ]
+    }
 }
