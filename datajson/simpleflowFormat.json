@@ -6,6 +6,7 @@
     "functions": {
         "main": {
             "override": false,
+            "description": "Main Function will only be needed in case of Activity. This will be first function called. ",
             "function_display_name": "Main Function",
             "flow": {
                 "nodes": [
