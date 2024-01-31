@@ -9,7 +9,20 @@
             "description": "Main Function will only be needed in case of Activity. This will be first function called. ",
             "function_display_name": "Main Function",
             "flow": {
+                "start_node_id": "conversationalAgent_0",
                 "nodes": [
+                    {
+                        "id":"start0",
+                        "name": "Start",
+                        "label": "Start",
+                        "inputControls": [],
+                        "outputControls": [{
+                            "name": "default",
+                            "id": "start-output-control-default",
+                            "label": "Start Control Output"
+                        }]
+                        
+                    },
                     {
                         "id": "conversationalAgent_0",
                         "ui": {},
@@ -19,6 +32,9 @@
                             "type": "WEBHOOK",
                             "category": "Agents",
                             "valid": true,
+                            "modulePath": "@activepieces/<module_name>",
+                            "baseClassName": "AgentExecutor | BaseChain",
+                            "actionName": "create_task",
                             "inputs": [
                                 {
                                     "label": "Memory",
@@ -41,9 +57,6 @@
                                 "memory": "{{bufferMemory_0.data.instance}}",
                                 "systemMessage": "Assistant is a large language model trained by OpenAI.\n\nAssistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.\n\nAssistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.\n\nOverall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist."
                             },
-                            "modulePath": "@activepieces/<module_name>",
-                            "baseClassName": "AgentExecutor | BaseChain",
-                            "actionName": "create_task",
                             "outputs": [
                                 {
                                     "id": "conversationalAgent_0-output-conversationalAgent-AgentExecutor|BaseChain",
@@ -89,38 +102,52 @@
                             ]
                         }
                     },
-                  
-                    
                     {
                         "id": "addnumbers",
                         "data": {
                             "type": "flowFunction",
                             "flowName": "addnumbers",
                             "name": "AddNumber",
-                            "inputControls":[],
-                            "outputControls":[],
+                            "inputControls": [
+                                {
+                                    "name": "default",
+                                    "id": "addnumber-control0",
+                                    "label": "Control Flow Input"
+                                }
+                            ],
+                            "outputControls": [
+                                {
+                                    "name": "default",
+                                    "id": "addnumber-control2",
+                                    "label": "Control Flow Output"
+                                }
+                            ],
                             "inputs": [
                                 {
                                     "id": "addnumbers-input0-addnumbers-number",
                                     "name": "firstNumber",
                                     "label": "firstNumber",
-                                    "type": "Number"
+                                    "type": "number",
+                                    "additionalParams": true
                                 },
                                 {
                                     "id": "addnumbers-input1-addnumbers-number",
                                     "name": "secNumber",
                                     "label": "secNumber",
-                                    "type": "Number"
+                                    "type": "number",
+                                    "additionalParams": true
                                 }
                             ],
-                            "inputData"{
+                            "inputData": {
+                                "firstNumber": 1,
+                                "secNumber": 2
                             },
                             "outputs": [
                                 {
                                     "id": "addnumbers-output-addnumbers-number",
                                     "name": "addnumbers",
                                     "label": "AddNumber",
-                                    "type": "Number"
+                                    "type": "number"
                                 }
                             ]
                         }
@@ -132,7 +159,17 @@
                             "flowName": "@agent/agent1",
                             "name": "flowAgent1",
                             "inputs": [],
-                            "outputs": []
+                            "outputs": [],
+                            "inputControls": [{
+                                "name": "default",
+                                "id": "myagent-control0",
+                                "label": "Control Flow Input"
+                            }],
+                            "outputControls": [{
+                                "name": "default",
+                                "id": "myagent-control2",
+                                "label": "Control Flow Output"
+                            }]
                         }
                     },
                     {
@@ -142,7 +179,17 @@
                             "flowName": "@orchestrator/orchestrator1",
                             "name": "flowOrchestrator1",
                             "inputs": [],
-                            "outputs": []
+                            "outputs": [],
+                            "inputControls": [{
+                                "name": "default",
+                                "id": "myorchestrator-control0",
+                                "label": "Control Flow Input"
+                            }],
+                            "outputControls": [{
+                                "name": "default",
+                                "id": "myorchestrator-control2",
+                                "label": "Control Flow Output"
+                            }]
                         }
                     }
                 ],
@@ -169,113 +216,56 @@
             }
         },
         "add_numbers": {
-            "inputs": [],
-            "outputs": [],
             "function_display_name": "Add Two Numbers",
             "flow": {
                 "nodes": [
                     {
-                        "id": "conversationalAgent_0",
-                        "ui": {},
-                        "data": {
-                            "name": "trigger",
-                            "label": "Webhook Trigger",
-                            "type": "WEBHOOK",
-                            "category": "Agents",
-                            "valid": true,
-                            "inputs": [
-                                {
-                                    "label": "Memory",
-                                    "name": "memory",
-                                    "type": "BaseChatMemory",
-                                    "id": "conversationalAgent_0-input-memory-BaseChatMemory"
-                                },
-                                {
-                                    "label": "System Message",
-                                    "name": "systemMessage",
-                                    "type": "string",
-                                    "rows": 4,
-                                    "default": "Assistant is a large language model trained by OpenAI.\n\nAssistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.\n\nAssistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.\n\nOverall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist.",
-                                    "optional": true,
-                                    "additionalParams": true,
-                                    "id": "conversationalAgent_0-input-systemMessage-string"
-                                }
-                            ],
-                            "inputData": {
-                                "memory": "{{bufferMemory_0.data.instance}}",
-                                "systemMessage": "Assistant is a large language model trained by OpenAI.\n\nAssistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.\n\nAssistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.\n\nOverall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist."
+                        "id":"start0",
+                        "name": "Start",
+                        "label": "Start",
+                        "inputs": [],
+                        "outputs": [
+                            {
+                                "id": "addnumbers-input0-addnumbers-number",
+                                "name": "firstNumber",
+                                "label": "firstNumber",
+                                "type": "number",
+                                "additionalParams": true
                             },
-                            "modulePath": "@activepieces/<module_name>",
-                            "baseClassName": "AgentExecutor | BaseChain",
-                            "actionName": "create_task",
-                            "outputs": {},
-                            "outputAnchors": [
-                                {
-                                    "id": "conversationalAgent_0-output-conversationalAgent-AgentExecutor|BaseChain",
-                                    "name": "conversationalAgent",
-                                    "label": "AgentExecutor",
-                                    "type": "AgentExecutor | BaseChain"
-                                }
-                            ],
-                            "inputControls": [
-                                {
-                                    "name": "defaultFunction",
-                                    "id": "conversationalAgent_0-input-control-default",
-                                    "label": "Control Flow Input"
-                                }
-                            ],
-                            "outputControls": [
-                                {
-                                    "name": "default",
-                                    "id": "conversationalAgent_0-output-control-default",
-                                    "label": "Control Flow Output"
-                                }
-                            ],
-                            "id": "conversationalAgent_0",
-                            "selected": false
-                        }
+                            {
+                                "id": "addnumbers-input1-addnumbers-number",
+                                "name": "secNumber",
+                                "label": "secNumber",
+                                "type": "number",
+                                "additionalParams": true
+                            }
+                        ],
+                        "inputControls": [],
+                        "outputControls": [{
+                            "name": "default",
+                            "id": "start-output-control-default",
+                            "label": "Start Control Output"
+                        }]
                     },
                     {
-                        "id": "wait_for_user_response_0",
-                        "data": {
-                            "name": "testNode",
-                            "label": "TestNode",
-                            "type": "Node",
-                            "category": "Agents",
-                            "valid": true,
-                            "inputs": [],
-                            "outputs": []
-                        }
-                    },
-                    {
-                        "id": "addnumbers",
-                        "data": {
-                            "type": "flowFunction",
-                            "flowName": "addnumbers",
-                            "name": "AddNumber",
-                            "inputs": [],
-                            "outputs": []
-                        }
-                    },
-                    {
-                        "id": "myagent",
-                        "data": {
-                            "type": "flowClass",
-                            "flowName": "@agent/agent1",
-                            "name": "flowAgent1",
-                            "inputs": [],
-                            "outputs": []
-                        }
-                    },
-                    {
-                        "id": "myorchestrator",
-                        "data": {
-                            "type": "flowClass",
-                            "flowName": "@orchestrator/orchestrator1",
-                            "name": "flowOrchestrator1",
-                            "inputs": [],
-                            "outputs": []
-                        }
+                        "id":"End",
+                        "name": "End",
+                        "label": "End",
+                        "inputs": [
+                            {
+                                "id": "addnumbers-output-addnumbers-number",
+                                "name": "addnumbers",
+                                "label": "AddNumber",
+                                "type": "number"
+                            }
+                        ],
+                        "outputs": [],
+                        "inputControls": [{
+                            "name": "default",
+                            "id": "eng-input-control-default",
+                            "label": "End Control Input"
+                        }],
+                        "outputControls": []
                     }
                 ],
                 "edges": [
