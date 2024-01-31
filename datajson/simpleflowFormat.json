@@ -14,8 +14,8 @@
                         "id": "conversationalAgent_0",
                         "ui": {},
                         "data": {
-                            "name": "trigger",
-                            "label": "Webhook Trigger",
+                            "name": "ConversationalAgent",
+                            "label": "ConversationalAgent",
                             "type": "WEBHOOK",
                             "category": "Agents",
                             "valid": true,
@@ -44,8 +44,7 @@
                             "modulePath": "@activepieces/<module_name>",
                             "baseClassName": "AgentExecutor | BaseChain",
                             "actionName": "create_task",
-                            "outputs": {},
-                            "outputAnchors": [
+                            "outputs": [
                                 {
                                     "id": "conversationalAgent_0-output-conversationalAgent-AgentExecutor|BaseChain",
                                     "name": "conversationalAgent",
@@ -72,25 +71,58 @@
                         }
                     },
                     {
-                        "id": "wait_for_user_response_0",
+                        "id": "bufferMemory_0",
                         "data": {
-                            "name": "testNode",
-                            "label": "TestNode",
-                            "type": "Node",
-                            "category": "Agents",
+                            "label": "Buffer Memory",
+                            "name": "bufferMemory",
+                            "version": 1,
+                            "type": "BufferMemory",
                             "valid": true,
                             "inputs": [],
-                            "outputs": []
+                            "outputs": [
+                                {
+                                    "id": "bufferMemory_0-output-bufferMemory-BufferMemory|BaseChatMemory|BaseMemory",
+                                    "name": "chatOpenAI",
+                                    "label": "ChatOpenAI",
+                                    "type": "ChatOpenAI | BaseChatModel | BaseLanguageModel | Runnable"
+                                }
+                            ]
                         }
                     },
+                  
+                    
                     {
                         "id": "addnumbers",
                         "data": {
                             "type": "flowFunction",
                             "flowName": "addnumbers",
                             "name": "AddNumber",
-                            "inputs": [],
-                            "outputs": []
+                            "inputControls":[],
+                            "outputControls":[],
+                            "inputs": [
+                                {
+                                    "id": "addnumbers-input0-addnumbers-number",
+                                    "name": "firstNumber",
+                                    "label": "firstNumber",
+                                    "type": "Number"
+                                },
+                                {
+                                    "id": "addnumbers-input1-addnumbers-number",
+                                    "name": "secNumber",
+                                    "label": "secNumber",
+                                    "type": "Number"
+                                }
+                            ],
+                            "inputData"{
+                            },
+                            "outputs": [
+                                {
+                                    "id": "addnumbers-output-addnumbers-number",
+                                    "name": "addnumbers",
+                                    "label": "AddNumber",
+                                    "type": "Number"
+                                }
+                            ]
                         }
                     },
                     {
@@ -104,28 +136,17 @@
                         }
                     },
                     {
-                        "id":"myorchestrator",
-                        "data":{
-                            "type":"flowClass",
-                            "flowName":"@orchestrator/orchestrator1",
-                            "name":"flowOrchestrator1",
-                            "inputs":[],
-                            "outputs":[]
+                        "id": "myorchestrator",
+                        "data": {
+                            "type": "flowClass",
+                            "flowName": "@orchestrator/orchestrator1",
+                            "name": "flowOrchestrator1",
+                            "inputs": [],
+                            "outputs": []
                         }
                     }
                 ],
                 "edges": [
-                    {
-                        "source": "chatOpenAI_0",
-                        "sourceHandle": "chatOpenAI_0-output-chatOpenAI-ChatOpenAI|BaseChatModel|BaseLanguageModel",
-                        "target": "conversationalAgent_0",
-                        "targetHandle": "conversationalAgent_0-input-model-BaseLanguageModel",
-                        "type": "buttonedge",
-                        "id": "chatOpenAI_0-chatOpenAI_0-output-chatOpenAI-ChatOpenAI|BaseChatModel|BaseLanguageModel-conversationalAgent_0-conversationalAgent_0-input-model-BaseLanguageModel",
-                        "data": {
-                            "label": ""
-                        }
-                    },
                     {
                         "source": "bufferMemory_0",
                         "sourceHandle": "bufferMemory_0-output-bufferMemory-BufferMemory|BaseChatMemory|BaseMemory",
@@ -136,6 +157,13 @@
                         "data": {
                             "label": ""
                         }
+                    },
+                    {
+                        "source": "conversationalAgent_0",
+                        "sourceHandle": "conversationalAgent_0-output-conversationalAgent-AgentExecutor|BaseChain",
+                        "target": "bufferMemory_0",
+                        "targetHandle": "bufferMemory_0-input-memory-BaseChatMemory",
+                        "type": "buttonedge",
                     }
                 ]
             }
@@ -240,28 +268,17 @@
                         }
                     },
                     {
-                        "id":"myorchestrator",
-                        "data":{
-                            "type":"flowClass",
-                            "flowName":"@orchestrator/orchestrator1",
-                            "name":"flowOrchestrator1",
-                            "inputs":[],
-                            "outputs":[]
+                        "id": "myorchestrator",
+                        "data": {
+                            "type": "flowClass",
+                            "flowName": "@orchestrator/orchestrator1",
+                            "name": "flowOrchestrator1",
+                            "inputs": [],
+                            "outputs": []
                         }
                     }
                 ],
                 "edges": [
-                    {
-                        "source": "chatOpenAI_0",
-                        "sourceHandle": "chatOpenAI_0-output-chatOpenAI-ChatOpenAI|BaseChatModel|BaseLanguageModel",
-                        "target": "conversationalAgent_0",
-                        "targetHandle": "conversationalAgent_0-input-model-BaseLanguageModel",
-                        "type": "buttonedge",
-                        "id": "chatOpenAI_0-chatOpenAI_0-output-chatOpenAI-ChatOpenAI|BaseChatModel|BaseLanguageModel-conversationalAgent_0-conversationalAgent_0-input-model-BaseLanguageModel",
-                        "data": {
-                            "label": ""
-                        }
-                    },
                     {
                         "source": "bufferMemory_0",
                         "sourceHandle": "bufferMemory_0-output-bufferMemory-BufferMemory|BaseChatMemory|BaseMemory",
