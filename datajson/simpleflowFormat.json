@@ -73,18 +73,44 @@
                     },
                     {
                         "id": "wait_for_user_response_0",
-                        "displayName": "Wait For User Response",
-                        "name": "step_1",
-                        "valid": true,
-                        "type": "PIECE",
-                        "settings": {
-                            "pieceName": "@activepieces/piece-wait-for-user-response",
-                            "pieceVersion": "~0.0.1",
-                            "input": {},
-                            "inputUiInfo": {
-                                "customizedInputs": {}
-                            },
-                            "actionName": "WaitFor"
+                        "data": {
+                            "name": "testNode",
+                            "label": "TestNode",
+                            "type": "Node",
+                            "category": "Agents",
+                            "valid": true,
+                            "inputs": [],
+                            "outputs": []
+                        }
+                    },
+                    {
+                        "id": "addnumbers",
+                        "data": {
+                            "type": "flowFunction",
+                            "flowName": "addnumbers",
+                            "name": "AddNumber",
+                            "inputs": [],
+                            "outputs": []
+                        }
+                    },
+                    {
+                        "id": "myagent",
+                        "data": {
+                            "type": "flowClass",
+                            "flowName": "@agent/agent1",
+                            "name": "flowAgent1",
+                            "inputs": [],
+                            "outputs": []
+                        }
+                    },
+                    {
+                        "id":"myorchestrator",
+                        "data":{
+                            "type":"flowClass",
+                            "flowName":"@orchestrator/orchestrator1",
+                            "name":"flowOrchestrator1",
+                            "inputs":[],
+                            "outputs":[]
                         }
                     }
                 ],
@@ -112,9 +138,11 @@
                         }
                     }
                 ]
-            }      
+            }
         },
         "add_numbers": {
+            "inputs": [],
+            "outputs": [],
             "function_display_name": "Add Two Numbers",
             "flow": {
                 "nodes": [
