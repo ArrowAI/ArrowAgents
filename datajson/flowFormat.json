@@ -152,17 +152,6 @@
         ],
         "edges": [
             {
-                "source": "calculator_0",
-                "sourceHandle": "calculator_0-output-calculator-Calculator|Tool|StructuredTool",
-                "target": "conversationalAgent_0",
-                "targetHandle": "conversationalAgent_0-input-tools-Tool",
-                "type": "buttonedge",
-                "id": "calculator_0-calculator_0-output-calculator-Calculator|Tool|StructuredTool-conversationalAgent_0-conversationalAgent_0-input-tools-Tool",
-                "data": {
-                    "label": ""
-                }
-            },
-            {
                 "source": "chatOpenAI_0",
                 "sourceHandle": "chatOpenAI_0-output-chatOpenAI-ChatOpenAI|BaseChatModel|BaseLanguageModel",
                 "target": "conversationalAgent_0",
