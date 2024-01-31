@@ -1,8 +1,8 @@
 {
     "id": "00D5FaL7IUFHeTUuQob80",
-    "name": "@crew/youtube-crew",
-    "label": "Youtube Crew",
-    "classType": "crew",
+    "name": "@activity/youtube-activity",
+    "label": "Youtube Video Create and Post",
+    "classType": "activity",
     "functions": {
         "main": {
             "override": false,
