@@ -4,6 +4,7 @@ import { ExecutionType, FlowJson } from "./interfaces";
 import { DB } from './../services/flowservice'
 import { IntegrationInterface } from "../actionmodules/interfaces";
 import { FlowState } from "../engine/flowexecutorstore";
+import { Activity, Flow, Function, INode } from "./flow";
 export class FlowExecuteHandler {
     constructor() {
 
@@ -19,47 +20,107 @@ export class FlowExecuteHandler {
         const connections: any[] = flow.connections;
         // return this.iterateGraph(nodes, connections, executionState);
     }
-
-
-    async iterateGraph(workflow: any, executionState?: FlowState) {
-        // console.log(workflow);
-        let { nodes, connections } = workflow.functions.main.flow;
-        //This will be called to iterate and process the graph. This will have logic to handle control node, data Node, Parallelization, Multi Server etc.
-        let currentNode = nodes[0]; // start with the first node
-        console.log(currentNode)
-        let flowExecutionContext = executionState!;
-        while (currentNode) {
-            console.log(currentNode);
-            // // process all data node connected to the current node before execution of current node
-            // const connectedDataNodes = connections
-            //     .filter((connection: any) => connection.source === currentNode.id)
-            //     .map((connection: any) => nodes.find((node:any) => node.id === connection.target))
-            //     .filter((node:any) => node && node.type === 'data');
-
-            // for (const dataNode of connectedDataNodes) {
-            //     console.log(`Processing data node: ${dataNode.id}`);
-            //     const actionExecutor = DB.getActionExecutor(dataNode);
-            //     flowExecutionContext.context = await actionExecutor.execute(dataNode.actions[0].actionId!);
-            // }
-
-            // // process the current node
-            // console.log(`Processing ${currentNode.type} node: ${currentNode.id}`);
-            // const actionExecutor = DB.getActionExecutor(currentNode);
-            // flowExecutionContext.context = await actionExecutor.execute(currentNode.actions[0].actionId!);
-            // // find the next node in the graph
-            // const nextNode = connections.find((connection: any) => connection.source === currentNode.id);
-            // if (!nextNode) {
-            //     // if there's no next node, we've reached the end of the graph
-            //     break;
-            // }
-            // // update the current node to the next node
-            // currentNode = nodes.find((node: any) => node.id === nextNode.target);
-            break
+    async startActivity(activity: any, executionState: FlowState) {
+        let activityObject: Activity = new Activity(activity);
+        let mainFunction: Function = activityObject.functions.find((func: any) => func.name === 'main')!;
+        if (!mainFunction) {
+            throw new Error('No main function found');
         }
-        console.log('Workflow execution complete.');
+        else {
+            let currentNode: INode = mainFunction.flow.nodes.find((node: any) => node.data.name === 'Start');
 
-        return flowExecutionContext;
+            this.iterateGraph(mainFunction.flow, currentNode, executionState, 'default');
+        }
 
+
+    }
+    async iterateGraph(flow: Flow, currentNode: INode, executionState: FlowState, outputcontrolName: string = "default") {
+        try {
+            let nodeToExecute: INode = flow.getNextControlNode(currentNode.id, outputcontrolName);
+            // console.log(nodeToExecute)
+            if (nodeToExecute) {
+                this.executeControlNode(flow, nodeToExecute, executionState);
+
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    async executeControlNode(flow: Flow, nodeToExecute: INode, executionState: FlowState) {
+        let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
+        //Logic From Flowise as now subgraph is same sa Flowise flow 
+        const { graph, nodeDependencies } = flow.constructGraphs(subgraph.nodes, subgraph.edges);
+        const directedGraph = graph
+        const endingNodeIds = flow.getEndingNodes(nodeDependencies, directedGraph)
+        if (!endingNodeIds.length) return (`Ending nodes not found`);
+        const endingNodes = subgraph.nodes.filter((nd:any) => endingNodeIds.includes(nd.id));
+         /*** Get Starting Nodes with Reversed Graph ***/
+         const constructedObj = flow.constructGraphs(subgraph.nodes, subgraph.edges, { isReversed: true })
+         const nonDirectedGraph = constructedObj.graph
+         let startingNodeIds: string[] = []
+         let depthQueue: any = {}
+         for (const endingNodeId of endingNodeIds) {
+             const res = flow.getStartingNodes(nonDirectedGraph, endingNodeId)
+             startingNodeIds.push(...res.startingNodeIds)
+             depthQueue = Object.assign(depthQueue, res.depthQueue)
+         }
+         startingNodeIds = [...new Set(startingNodeIds)]
+
+         const startingNodes = subgraph.nodes.filter((nd:any) => startingNodeIds.includes(nd.id));
+         console.log(startingNodes)
+
+        //  logger.debug(`[server]: Start building chatflow ${chatflowid}`)
+    
+    }
+    async executeDataGraph() {
+
+
+    }
+
+    // async iterateGraph(workflow: any, executionState?: FlowState) {
+    // console.log(workflow);
+    // let { nodes, connections } = workflow.functions.main.flow;
+    //This will be called to iterate and process the graph. This will have logic to handle control node, data Node, Parallelization, Multi Server etc.
+
+    //    let currentNode = nodes.find((node: any) => node.name === 'Start');
+    //     console.log(currentNode)
+    //     let flowExecutionContext = executionState!;
+    //     while (currentNode) {
+    //         console.log(currentNode);
+    // // process all data node connected to the current node before execution of current node
+    // const connectedDataNodes = connections
+    //     .filter((connection: any) => connection.source === currentNode.id)
+    //     .map((connection: any) => nodes.find((node:any) => node.id === connection.target))
+    //     .filter((node:any) => node && node.type === 'data');
+
+    // for (const dataNode of connectedDataNodes) {
+    //     console.log(`Processing data node: ${dataNode.id}`);
+    //     const actionExecutor = DB.getActionExecutor(dataNode);
+    //     flowExecutionContext.context = await actionExecutor.execute(dataNode.actions[0].actionId!);
+    // }
+
+    // // process the current node
+    // console.log(`Processing ${currentNode.type} node: ${currentNode.id}`);
+    // const actionExecutor = DB.getActionExecutor(currentNode);
+    // flowExecutionContext.context = await actionExecutor.execute(currentNode.actions[0].actionId!);
+    // // find the next node in the graph
+    // const nextNode = connections.find((connection: any) => connection.source === currentNode.id);
+    // if (!nextNode) {
+    //     // if there's no next node, we've reached the end of the graph
+    //     break;
+    // }
+    // // update the current node to the next node
+    // currentNode = nodes.find((node: any) => node.id === nextNode.target);
+    // break
+    // }
+    // console.log('Workflow execution complete.');
+
+    // return flowExecutionContext;
+
+    // }
+
+    async processControlNode(node: any, edeges: any, executionState: FlowState) {
     }
 
 

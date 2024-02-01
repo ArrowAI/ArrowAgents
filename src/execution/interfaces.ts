@@ -14,6 +14,7 @@ export type FlowJson= {
 }
 
 export type INode={
+    id(id: any): unknown;
 
 }
 export type IEdege={
