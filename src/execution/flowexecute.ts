@@ -48,14 +48,14 @@ export class FlowExecuteHandler {
 
     }
     async executeControlNode(flow: Flow, nodeToExecute: INode, executionState: FlowState) {
-        
+
         let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
 
         // Logic From Flowise as now subgraph is same sa Flowise flow  
         const { graph, nodeDependencies } = flow.constructGraphs(subgraph.nodes, subgraph.edges);
         const directedGraph = graph
         const endingNodeIds = flow.getEndingNodes(nodeDependencies, directedGraph);
-        console.log("ending node id", endingNodeIds)
+        //console.log("ending node id", endingNodeIds)
         if (!endingNodeIds.length) return (`Ending nodes not found`);
         const endingNodes = subgraph.nodes.filter((nd: any) => endingNodeIds.includes(nd.id));
         /*** Get Starting Nodes with Reversed Graph ***/
@@ -69,30 +69,26 @@ export class FlowExecuteHandler {
             depthQueue = Object.assign(depthQueue, res.depthQueue)
         }
         startingNodeIds = [...new Set(startingNodeIds)]
-
         const startingNodes = subgraph.nodes.filter((nd: any) => startingNodeIds.includes(nd.id));
-        console.log(startingNodes)
-
+        // console.log(startingNodes)
+        let componentNodes: any = {
+            variable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/numberVariable.ts" },
+            addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/sum.ts" }
+        }
         /*** BFS to traverse from Starting Nodes to Ending Node ***/
-        const flowNodes = await flow.processConnectedDataNodes(
-            startingNodeIds,
-            subgraph.nodes,
-            subgraph.edges,
-            graph,
-            depthQueue,
-            [],
-            "",
-            [],
-            "chatId",
-            "sessionId" ?? '',
-            subgraph.id,
-            {},
-            {},
-            {}
-        )
-        console.log(flowNodes)
-
-
+        const flowNodes = await flow.processConnectedDataNodes(startingNodeIds, subgraph.nodes, subgraph.edges, graph, depthQueue, componentNodes, "", [], "chatId", "sessionId" ?? '', subgraph.id, {}, {}, {})
+        nodeToExecute = endingNodeIds.length === 1 ? flowNodes.find((node: any) => endingNodeIds[0] === node.id) : flowNodes[flowNodes.length - 1]
+        if (!nodeToExecute) return new Error("Node not found")
+        const reactFlowNodeData: any = flow.resolveVariables(nodeToExecute.data, flowNodes, "", []);
+        let nodeToExecuteData: any = reactFlowNodeData;
+        console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
+        const nodeInstanceFilePath = componentNodes[nodeToExecuteData.name].filePath as string
+        const nodeModule = await import(nodeInstanceFilePath)
+        const nodeInstance = new nodeModule.nodeClass();
+        let result = await nodeInstance.run(nodeToExecuteData, "", {
+        });
+        console.log("final result", result);
+        return result;
     }
     async executeDataGraph() {
 

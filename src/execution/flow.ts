@@ -395,11 +395,11 @@ resolveVariables = (
     chatHistory: any[]
 ): any => {
     let flowNodeData = cloneDeep(reactFlowNodeData)
-    const types = 'inputs'
+    const types = 'inputData'
 
     const getParamValues = (paramsObj: any) => {
         for (const key in paramsObj) {
-            const paramValue: string = paramsObj[key]
+            const paramValue: string = paramsObj[key];
             if (Array.isArray(paramValue)) {
                 const resolvedInstances = []
                 for (const param of paramValue) {
@@ -408,8 +408,12 @@ resolveVariables = (
                 }
                 paramsObj[key] = resolvedInstances
             } else {
-                const isAcceptVariable = reactFlowNodeData.inputParams.find((param:any) => param.name === key)?.acceptVariable ?? false
+                // console.log(paramValue)
+
+                const isAcceptVariable = reactFlowNodeData.inputs.find((param:any) => param.name === key)?.acceptVariable ?? false
+                // console.log(isAcceptVariable)
                 const resolvedInstance = this.getVariableValue(paramValue, reactFlowNodes, question, chatHistory, isAcceptVariable)
+                console.log("resolvedInstance",resolvedInstance)
                 paramsObj[key] = resolvedInstance
             }
         }
@@ -428,7 +432,7 @@ resolveVariables = (
  * @returns {INodeData}
  */
     replaceInputsWithConfig = (flowNodeData: any, overrideConfig: any) => {
-        const types = 'inputs'
+        const types = 'inputData'
 
         const getParamValues = (inputsObj: any) => {
             for (const config in overrideConfig) {
@@ -481,7 +485,9 @@ resolveVariables = (
         isUpsert?: boolean,
         stopNodeId?: string
     ) => {
-        const flowNodes = cloneDeep(reactFlowNodes)
+        const flowNodes = cloneDeep(reactFlowNodes);
+        // console.log('processConnectedDataNodes', flowNodes);
+       
 
         // Create a Queue and add our initial node in it
         const nodeQueue: any = []
@@ -507,14 +513,15 @@ resolveVariables = (
             try {
                 //TODO: Check How to handle node path 
                 const nodeInstanceFilePath = componentNodes[reactFlowNode.data.name].filePath as string
-                const nodeModule = await import(nodeInstanceFilePath)
+                // console.log("nodeInstanceFilePath",nodeInstanceFilePath)
+                const nodeModule = await import(nodeInstanceFilePath);
+                // console.log(nodeModule)
                 const newNodeInstance = new nodeModule.nodeClass()
 
                 let flowNodeData = cloneDeep(reactFlowNode.data)
-                if (overrideConfig) flowNodeData = this.replaceInputsWithConfig(flowNodeData, overrideConfig)
-                const reactFlowNodeData: any = this.resolveVariables(flowNodeData, flowNodes, question, chatHistory)
-
-
+                // if (overrideConfig) flowNodeData = this.replaceInputsWithConfig(flowNodeData, overrideConfig)
+                const reactFlowNodeData: any = this.resolveVariables(flowNodeData, flowNodes, question, chatHistory);
+                console.log("reactFlowNodeData",JSON.stringify(reactFlowNodeData))
                 let outputResult = await newNodeInstance.init(reactFlowNodeData, question, {
                     chatId,
                     sessionId,
@@ -544,7 +551,7 @@ resolveVariables = (
 
                 flowNodes[nodeIndex].data.instance = outputResult
 
-                console.log(`[server]: Finished initializing ${reactFlowNode.data.label} (${reactFlowNode.data.id})`)
+                // console.log(`[server]: Finished initializing ${reactFlowNode.data.label} (${reactFlowNode.data.id})`)
 
             } catch (e: any) {
 

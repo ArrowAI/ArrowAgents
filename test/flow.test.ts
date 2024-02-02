@@ -2,7 +2,7 @@ import {FlowExecuteHandler} from "../src/execution/flowexecute"
 
 
 // Open actualworkflow.json file and parse the json as variable workflow
-var workflow = require('../random/subgraph.json');
+var workflow = require('../datajson/sumoftwo.json');
 
 describe('Start Activity', () => {
     it('Execute the flow', async () => {

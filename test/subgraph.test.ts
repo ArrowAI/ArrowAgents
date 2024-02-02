@@ -7,7 +7,7 @@ var workflow = require('../datajson/simpleflowFormat.json');
 
 describe('Get SubGraph ', () => {
     it('cal function getSubGraphOfAllConnectedDataNodes', async () => {
-        let flow = new Flow(workflow.functions.main.flow);
+        // let flow = new Flow(workflow.functions.main.flow);
         // flow.getSubGraphOfAllConnectedDataNodes('conversationalAgent_0');
         // var flowExecutor = new FlowExecuteHandler();
         // var response = await flowExecutor.iterateGraph(workflow,'', {context: {},currentNodeId:''});
