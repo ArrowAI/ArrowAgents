@@ -48,30 +48,51 @@ export class FlowExecuteHandler {
 
     }
     async executeControlNode(flow: Flow, nodeToExecute: INode, executionState: FlowState) {
+        
         let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
-        //Logic From Flowise as now subgraph is same sa Flowise flow 
+
+        // Logic From Flowise as now subgraph is same sa Flowise flow  
         const { graph, nodeDependencies } = flow.constructGraphs(subgraph.nodes, subgraph.edges);
         const directedGraph = graph
-        const endingNodeIds = flow.getEndingNodes(nodeDependencies, directedGraph)
+        const endingNodeIds = flow.getEndingNodes(nodeDependencies, directedGraph);
+        console.log("ending node id", endingNodeIds)
         if (!endingNodeIds.length) return (`Ending nodes not found`);
-        const endingNodes = subgraph.nodes.filter((nd:any) => endingNodeIds.includes(nd.id));
-         /*** Get Starting Nodes with Reversed Graph ***/
-         const constructedObj = flow.constructGraphs(subgraph.nodes, subgraph.edges, { isReversed: true })
-         const nonDirectedGraph = constructedObj.graph
-         let startingNodeIds: string[] = []
-         let depthQueue: any = {}
-         for (const endingNodeId of endingNodeIds) {
-             const res = flow.getStartingNodes(nonDirectedGraph, endingNodeId)
-             startingNodeIds.push(...res.startingNodeIds)
-             depthQueue = Object.assign(depthQueue, res.depthQueue)
-         }
-         startingNodeIds = [...new Set(startingNodeIds)]
+        const endingNodes = subgraph.nodes.filter((nd: any) => endingNodeIds.includes(nd.id));
+        /*** Get Starting Nodes with Reversed Graph ***/
+        const constructedObj = flow.constructGraphs(subgraph.nodes, subgraph.edges, { isReversed: true })
+        const nonDirectedGraph = constructedObj.graph
+        let startingNodeIds: string[] = []
+        let depthQueue: any = {}
+        for (const endingNodeId of endingNodeIds) {
+            const res = flow.getStartingNodes(nonDirectedGraph, endingNodeId)
+            startingNodeIds.push(...res.startingNodeIds)
+            depthQueue = Object.assign(depthQueue, res.depthQueue)
+        }
+        startingNodeIds = [...new Set(startingNodeIds)]
 
-         const startingNodes = subgraph.nodes.filter((nd:any) => startingNodeIds.includes(nd.id));
-         console.log(startingNodes)
+        const startingNodes = subgraph.nodes.filter((nd: any) => startingNodeIds.includes(nd.id));
+        console.log(startingNodes)
 
-        //  logger.debug(`[server]: Start building chatflow ${chatflowid}`)
-    
+        /*** BFS to traverse from Starting Nodes to Ending Node ***/
+        const flowNodes = await flow.processConnectedDataNodes(
+            startingNodeIds,
+            subgraph.nodes,
+            subgraph.edges,
+            graph,
+            depthQueue,
+            [],
+            "",
+            [],
+            "chatId",
+            "sessionId" ?? '',
+            subgraph.id,
+            {},
+            {},
+            {}
+        )
+        console.log(flowNodes)
+
+
     }
     async executeDataGraph() {
 

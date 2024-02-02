@@ -1,11 +1,13 @@
+import {FlowExecuteHandler} from "../src/execution/flowexecute"
 
-import {Engine} from './../src/engine/engine'
-let engine = new Engine();
-describe('GET NODE JSON',  () => {
-    it('should return node json', async () => {
-        // let response = await engine.executeFlow('flowId');
-        // console.log(response);
-        // expect(response).toHaveProperty('context');
-        expect(1).toBe(1);
+
+// Open actualworkflow.json file and parse the json as variable workflow
+var workflow = require('../random/subgraph.json');
+
+describe('Start Activity', () => {
+    it('Execute the flow', async () => {
+        var flowExecutor = new FlowExecuteHandler();
+        var response = await flowExecutor.startActivity(workflow, {context: {},currentNodeId:''});
+       expect(1).toBe(1);
     });
 });
