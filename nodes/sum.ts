@@ -11,6 +11,7 @@ export class addnumbers {
     category: string
     baseClasses: string[]
     inputs: any[]
+    outputs: any[]
     constructor() {
         console.log("Sum");
         this.name = "Sum";
@@ -23,6 +24,7 @@ export class addnumbers {
         this.inputs=[];
         this.icon="";
         this.category="";
+
         this.baseClasses=[]
         this.inputs = [{
             name: "firstNumber",
@@ -36,16 +38,29 @@ export class addnumbers {
             type: "number",
             additionalParams: true
         }]
+        this.outputs = [{
+            name: "sum",
+            label: "sum",
+            type: "number"
+        }]
     }
     async init(): Promise<any> {
         // Not used
         return undefined
     }
-    run(nodeData: any, input: string, options: any) {
+    getDataOutput(nodeData: any) {
+    
         
+    }
+    run(nodeData: any, input: string, context: any) {
+
         const firstNumber = nodeData.inputData?.firstNumber as string
         const secNumber = nodeData.inputData?.secNumber as string
-        return sum([Number(firstNumber), Number(secNumber)])
+        let result= sum([Number(firstNumber), Number(secNumber)]);
+        //TODO:object should be with outputpin and value
+        context[nodeData.id].outputData = { sum: result } as any;
+        return context[nodeData.id].outputData//result;
+        //we will call triggerOutputControlNode("nodeId","outputcontrolPinId",context)
     }
 }
 

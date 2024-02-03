@@ -29,7 +29,7 @@ export class FlowExecuteHandler {
         else {
             let currentNode: INode = mainFunction.flow.nodes.find((node: any) => node.data.name === 'Start');
 
-            this.iterateGraph(mainFunction.flow, currentNode, executionState, 'default');
+            return await this.iterateGraph(mainFunction.flow, currentNode, executionState, 'default');
         }
 
 
@@ -39,7 +39,8 @@ export class FlowExecuteHandler {
             let nodeToExecute: INode = flow.getNextControlNode(currentNode.id, outputcontrolName);
             // console.log(nodeToExecute)
             if (nodeToExecute) {
-                this.executeControlNode(flow, nodeToExecute, executionState);
+                let result = await this.executeControlNode(flow, nodeToExecute, executionState);
+                return result;
 
             }
         } catch (error) {
@@ -48,9 +49,7 @@ export class FlowExecuteHandler {
 
     }
     async executeControlNode(flow: Flow, nodeToExecute: INode, executionState: FlowState) {
-
         let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
-
         // Logic From Flowise as now subgraph is same sa Flowise flow  
         const { graph, nodeDependencies } = flow.constructGraphs(subgraph.nodes, subgraph.edges);
         const directedGraph = graph

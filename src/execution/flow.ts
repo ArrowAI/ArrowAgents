@@ -600,4 +600,10 @@ resolveVariables = (
         }
         return flowNodes
     }
+
+    triggerOutputControlNode(nodeId:string,outputcontrolPinId:string,context:any){
+
+    }
+
+
 }
