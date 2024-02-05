@@ -1,3 +1,4 @@
+import { FlowState } from '@src/engine/flowexecutorstore';
 import { cloneDeep, get, isEqual } from 'lodash'
 
 export interface INode {
@@ -480,10 +481,12 @@ resolveVariables = (
         sessionId: string,
         chatflowid: string,
         appDataSource: any,
+        executionState: FlowState,
         overrideConfig?: any,
         cachePool?: any,
         isUpsert?: boolean,
         stopNodeId?: string
+       
     ) => {
         const flowNodes = cloneDeep(reactFlowNodes);
         // console.log('processConnectedDataNodes', flowNodes);
@@ -522,7 +525,7 @@ resolveVariables = (
                 // if (overrideConfig) flowNodeData = this.replaceInputsWithConfig(flowNodeData, overrideConfig)
                 const reactFlowNodeData: any = this.resolveVariables(flowNodeData, flowNodes, question, chatHistory);
                 console.log("reactFlowNodeData",JSON.stringify(reactFlowNodeData))
-                let outputResult = await newNodeInstance.init(reactFlowNodeData, question, {
+                let outputResult:any = await newNodeInstance.init(reactFlowNodeData, question, {
                     chatId,
                     sessionId,
                     chatflowid,
@@ -548,8 +551,11 @@ resolveVariables = (
                 if (reactFlowNode.data.name === 'ifElseFunction' && typeof outputResult === 'object') {
 
                 }
-
+                if (executionState && executionState.context) {
+                    executionState.context[reactFlowNode.data.name] = outputResult;
+                }
                 flowNodes[nodeIndex].data.instance = outputResult
+
 
                 // console.log(`[server]: Finished initializing ${reactFlowNode.data.label} (${reactFlowNode.data.id})`)
 
@@ -601,9 +607,7 @@ resolveVariables = (
         return flowNodes
     }
 
-    triggerOutputControlNode(nodeId:string,outputcontrolPinId:string,context:any){
-
-    }
+    
 
 
 }

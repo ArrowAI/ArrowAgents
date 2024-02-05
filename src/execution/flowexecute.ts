@@ -5,6 +5,16 @@ import { DB } from './../services/flowservice'
 import { IntegrationInterface } from "../actionmodules/interfaces";
 import { FlowState } from "../engine/flowexecutorstore";
 import { Activity, Flow, Function, INode } from "./flow";
+import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
+let subject =new Subject<any>();
+// Assuming you have a way to get the output control node observable based on nodeId and outputcontrolPinId
+export function getOutputControlObservable(): Subject<any> {
+    // Implement logic to retrieve the observable for the specified output control node
+    // This is just a placeholder implementation
+    return subject
+}
+
 export class FlowExecuteHandler {
     constructor() {
 
@@ -49,6 +59,7 @@ export class FlowExecuteHandler {
 
     }
     async executeControlNode(flow: Flow, nodeToExecute: INode, executionState: FlowState) {
+        executionState.currentNodeId = nodeToExecute.id;
         let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
         // Logic From Flowise as now subgraph is same sa Flowise flow  
         const { graph, nodeDependencies } = flow.constructGraphs(subgraph.nodes, subgraph.edges);
@@ -75,7 +86,8 @@ export class FlowExecuteHandler {
             addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/sum.ts" }
         }
         /*** BFS to traverse from Starting Nodes to Ending Node ***/
-        const flowNodes = await flow.processConnectedDataNodes(startingNodeIds, subgraph.nodes, subgraph.edges, graph, depthQueue, componentNodes, "", [], "chatId", "sessionId" ?? '', subgraph.id, {}, {}, {})
+        const flowNodes = await flow.processConnectedDataNodes(startingNodeIds, subgraph.nodes, subgraph.edges, graph, depthQueue, componentNodes, "", [], "chatId", "sessionId" ?? '', subgraph.id,{},executionState);
+        //TODO:Store Previous Node Data To Context
         nodeToExecute = endingNodeIds.length === 1 ? flowNodes.find((node: any) => endingNodeIds[0] === node.id) : flowNodes[flowNodes.length - 1]
         if (!nodeToExecute) return new Error("Node not found")
         const reactFlowNodeData: any = flow.resolveVariables(nodeToExecute.data, flowNodes, "", []);
@@ -84,6 +96,7 @@ export class FlowExecuteHandler {
         const nodeInstanceFilePath = componentNodes[nodeToExecuteData.name].filePath as string
         const nodeModule = await import(nodeInstanceFilePath)
         const nodeInstance = new nodeModule.nodeClass();
+        this.subscribeOutputControlNode()
         let result = await nodeInstance.run(nodeToExecuteData, "", {
         });
         console.log("final result", result);
@@ -92,6 +105,27 @@ export class FlowExecuteHandler {
     async executeDataGraph() {
 
 
+    }
+    subscribeOutputControlNode() {
+        const outputControlObservable = getOutputControlObservable();
+        const subscription = outputControlObservable.subscribe({
+            next: (value) => {
+                // Handle the emitted value from the output control node
+                console.log('Received value from output control node:', value);
+                // You can also use the context parameter here if needed
+            },
+            error: (err) => {
+                // Handle any errors that occur during the subscription
+                console.error('Error occurred:', err);
+            },
+            complete: () => {
+                // Handle completion of the observable stream
+                console.log('Output control node completed');
+            }
+        });
+    
+        // Store the subscription somewhere if you need to unsubscribe later
+        // context.subscriptions.push(subscription);
     }
 
     // async iterateGraph(workflow: any, executionState?: FlowState) {

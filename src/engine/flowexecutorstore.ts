@@ -1,9 +1,12 @@
 import { DB } from "../services/flowservice";
 
 export type FlowState = {
-    context: object;
+    context: ExecutionContext;
     currentNodeId: string;
 }
+interface ExecutionContext {
+    [key: string]: any; // Or a more specific type if known
+   }
 
 export class flowExecutorStore {
 

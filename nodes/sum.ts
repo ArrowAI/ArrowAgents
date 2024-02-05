@@ -1,6 +1,6 @@
 import { sum } from "lodash"
 
-
+import { getOutputControlObservable } from "./../src/execution/flowexecute"
 export class addnumbers {
     label: string
     name: string
@@ -17,15 +17,15 @@ export class addnumbers {
         this.name = "Sum";
         this.label = "Sum";
         this.description = "Sum of two input varibale",
-     
-        this.version = 1;
- 
-        this.type = "Variable";
-        this.inputs=[];
-        this.icon="";
-        this.category="";
 
-        this.baseClasses=[]
+            this.version = 1;
+
+        this.type = "Variable";
+        this.inputs = [];
+        this.icon = "";
+        this.category = "";
+
+        this.baseClasses = []
         this.inputs = [{
             name: "firstNumber",
             label: "firstNumber",
@@ -39,9 +39,9 @@ export class addnumbers {
             additionalParams: true
         }]
         this.outputs = [{
-            name: "sum",
-            label: "sum",
-            type: "number"
+            name: "additionComplete",
+            label: "Addition Complete",
+            type: "control"
         }]
     }
     async init(): Promise<any> {
@@ -49,17 +49,28 @@ export class addnumbers {
         return undefined
     }
     getDataOutput(nodeData: any) {
-    
-        
+
+
     }
     run(nodeData: any, input: string, context: any) {
-
         const firstNumber = nodeData.inputData?.firstNumber as string
-        const secNumber = nodeData.inputData?.secNumber as string
-        let result= sum([Number(firstNumber), Number(secNumber)]);
-        //TODO:object should be with outputpin and value
-        context[nodeData.id].outputData = { sum: result } as any;
-        return context[nodeData.id].outputData//result;
+        const secNumber = nodeData.inputData?.secNumber as string;
+
+        let result = sum([Number(firstNumber), Number(secNumber)]);
+        context[nodeData.name] = {
+            "outputData": {
+
+            }
+        }
+        context[nodeData.name]["outputData"] = { sum: result } as any;
+        const outputControlObservable = getOutputControlObservable();
+        outputControlObservable.next({
+            nodeId: nodeData.id,
+            outputcontrolPinId: "additionComplete",
+            context: context
+        })
+        return context//result;
+        //TODO: we need to trigger output control node here
         //we will call triggerOutputControlNode("nodeId","outputcontrolPinId",context)
     }
 }
