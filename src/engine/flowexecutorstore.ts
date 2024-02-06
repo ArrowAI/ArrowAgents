@@ -3,6 +3,15 @@ import { DB } from "../services/flowservice";
 export type FlowState = {
     context: ExecutionContext;
     currentNodeId: string;
+    flowId: string;
+    flow: any
+}
+export type OutputControlObservableValue = {
+    
+        nodeId: string,
+        outputcontrolPinId: string,
+        flowState: FlowState
+    
 }
 interface ExecutionContext {
     [key: string]: any; // Or a more specific type if known

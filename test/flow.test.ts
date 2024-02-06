@@ -7,7 +7,11 @@ var workflow = require('../datajson/sumoftwo.json');
 describe('Start Activity', () => {
     it('Execute the flow', async () => {
         var flowExecutor = new FlowExecuteHandler();
-        var response = await flowExecutor.startActivity(workflow, {context: {},currentNodeId:''});
+        var response = await flowExecutor.startActivity(workflow, {
+            context: {}, currentNodeId: '',
+            flowId: "",
+            flow: undefined
+        });
        expect(1).toBe(1);
     });
 });

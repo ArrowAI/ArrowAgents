@@ -104,14 +104,41 @@ export class Flow {
         return connectedNodeIds;
     }
 
-    getNextControlNode(nodeId: string, outputcontrolName: string = "default"): INode {
+    getNextControlNode(nodeId: string, outputcontrolName: string = "default"): INode | null {
+        // Find the current node
         let currentNode = this.nodes.find((node: any) => node.id === nodeId);
-        // console.log(currentNode)
+        if (!currentNode) {
+            console.log(`Node with ID ${nodeId} not found.`);
+            return null;
+        }
+    
+        // Ensure the current node has outputControls property
+        if (!currentNode.data || !currentNode.data.outputControls) {
+            console.log(`Node with ID ${nodeId} does not have outputControls.`);
+            return null;
+        }
+    
+        // Find the output control by name
         let outputcontrol = currentNode.data.outputControls.find((outputcontrol: any) => outputcontrol.name === outputcontrolName);
-        if (outputcontrol == null) throw new Error("Control node not found");
+        if (!outputcontrol) {
+            console.log(`Output control with name ${outputcontrolName} not found.`);
+            return null;
+        }
+    
+        // Find the edge that connects to the output control
         let nextControlNodeEdge = this.edges.find((edge: any) => edge.sourceHandle === outputcontrol.id);
-        if (nextControlNodeEdge == null) throw new Error("Next control node not found");
+        if (!nextControlNodeEdge) {
+            console.log(`Edge connecting to output control with ID ${outputcontrol.id} not found.`);
+            return null;
+        }
+    
+        // Find the next control node
         let nextControlNode: INode = this.nodes.find((node: any) => node.id === nextControlNodeEdge.target);
+        if (!nextControlNode) {
+            console.log(`Next control node with ID ${nextControlNodeEdge.target} not found.`);
+            return null;
+        }
+    
         return nextControlNode;
     }
     // getSubGraphOfAllConnectedDataNodes(nodeId: string): Flow {

@@ -1,6 +1,7 @@
 import { sum } from "lodash"
 
 import { getOutputControlObservable } from "./../src/execution/flowexecute"
+import { FlowState } from "../src/engine/flowexecutorstore"
 export class addnumbers {
     label: string
     name: string
@@ -52,24 +53,23 @@ export class addnumbers {
 
 
     }
-    run(nodeData: any, input: string, context: any) {
+    run(nodeData: any, input: string, flowState: FlowState) {
         const firstNumber = nodeData.inputData?.firstNumber as string
         const secNumber = nodeData.inputData?.secNumber as string;
 
         let result = sum([Number(firstNumber), Number(secNumber)]);
-        context[nodeData.name] = {
+        flowState.context[nodeData.name] = {
             "outputData": {
-
+                sum: result
             }
         }
-        context[nodeData.name]["outputData"] = { sum: result } as any;
         const outputControlObservable = getOutputControlObservable();
         outputControlObservable.next({
             nodeId: nodeData.id,
             outputcontrolPinId: "additionComplete",
-            context: context
+            flowState: flowState
         })
-        return context//result;
+        return flowState//result;
         //TODO: we need to trigger output control node here
         //we will call triggerOutputControlNode("nodeId","outputcontrolPinId",context)
     }
