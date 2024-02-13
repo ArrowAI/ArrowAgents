@@ -113,12 +113,12 @@ export class FlowExecuteHandler {
             next: async (output: OutputControlObservableValue) => {
                 let flow = output.flowState.flow;
                 // Handle the emitted value from the output control node
-                console.log('Received value from output control node:', output.outputcontrolPinId);
+                console.log('Received value from output control node:', output.outputcontrolPinId,);
                 // return;
-                let currentNode =flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
-                // console.log("currentNode",currentNode)
+                // let currentNode =flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
+                // console.log("nex node to execute",currentNode.id)
                 // return
-                await this.iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
+                // await this.iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
             },
             error: (err) => {
                 // Handle any errors that occur during the subscription

@@ -58,6 +58,7 @@ export class addnumbers {
         const secNumber = nodeData.inputData?.secNumber as string;
 
         let result = sum([Number(firstNumber), Number(secNumber)]);
+        console.log("Sum result: " + result);
         flowState.context[nodeData.name] = {
             "outputData": {
                 sum: result

@@ -1,0 +1,30 @@
+{
+    "name": "addnumbers",
+    "label": "AddTwoNumber",
+    "inputs": [
+        {
+            "id": "addnumbers-input0-addnumbers-number",
+            "name": "firstNumber",
+            "label": "firstNumber",
+            "type": "number",
+            "additionalParams": true
+        },
+        {
+            "id": "addnumbers-input1-addnumbers-number",
+            "name": "secNumber",
+            "label": "secNumber",
+            "type": "number",
+            "additionalParams": true
+        }
+    ],
+    "inputData": {},
+    "outputs": [],
+    "inputControls": [
+        {
+            "name": "default",
+            "id": "addnumbers-input-control-default",
+            "label": "End Control Input"
+        }
+    ],
+    "outputControls": []
+}
