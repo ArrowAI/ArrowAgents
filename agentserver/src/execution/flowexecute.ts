@@ -1,7 +1,7 @@
 import { ExecutionType, FlowJson } from "./interfaces";
 
 
-import { DB } from './../services/flowservice'
+import { DB } from '../services/flowservice'
 import { IntegrationInterface } from "../actionmodules/interfaces";
 import { FlowState, OutputControlObservableValue } from "../engine/flowexecutorstore";
 import { Activity, Flow, Function, INode } from "./flow";
