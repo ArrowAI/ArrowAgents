@@ -1,1 +1,7 @@
-console.log("Hello World");
+
+
+
+async function execute(json:any) {
+    console.log("Hello World"); 
+    
+}
