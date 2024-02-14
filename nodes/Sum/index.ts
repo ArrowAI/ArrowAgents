@@ -1,7 +1,8 @@
 import { sum } from "lodash"
+import { FlowState } from "../../agentserver/src/engine/flowexecutorstore"
+import { getOutputControlObservable } from "../../agentserver/src/execution/flowexecute"
 
-import { getOutputControlObservable } from "./../src/execution/flowexecute"
-import { FlowState } from "../src/engine/flowexecutorstore"
+
 export class addnumbers {
     label: string
     name: string
