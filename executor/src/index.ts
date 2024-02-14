@@ -7,7 +7,6 @@ let subject = new Subject<any>();
 export function getOutputControlObservable(): Subject<any> {
     return subject
 }
-
 export const execute = (json: any) => {
     startActivity(json, {
         context: {}, currentNodeId: '',
