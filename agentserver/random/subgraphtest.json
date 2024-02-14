@@ -1,0 +1,223 @@
+{
+    "nodes": [
+        {
+            "id": "addnumbers1",
+            "data": {
+                "name": "addnumbers",
+                "label": "AddTwoNumber",
+                "inputs": [
+                    {
+                        "id": "addnumbers1-input0-addnumbers-number",
+                        "name": "firstNumber",
+                        "label": "firstNumber",
+                        "type": "number",
+                        "additionalParams": true
+                    },
+                    {
+                        "id": "addnumbers1-input1-addnumbers-number",
+                        "name": "secNumber",
+                        "label": "secNumber",
+                        "type": "number",
+                        "additionalParams": true
+                    }
+                ],
+                "inputData": {
+                    "firstNumber": "{{variable2.data.instance}}",
+                    "secNumber": "{{addnumbers0.data.instance}}"
+                },
+                "outputs": [],
+                "inputControls": [
+                    {
+                        "name": "default",
+                        "id": "addnumbers1-input-control-default",
+                        "label": "End Control Input"
+                    }
+                ],
+                "outputControls": [
+                    {
+                        "id": "additionComplete",
+                        "name": "additionComplete",
+                        "label": "Addition Complete",
+                        "type": "number"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "addnumbers0",
+            "data": {
+                "name": "addnumbers",
+                "label": "AddTwoNumber",
+                "inputs": [
+                    {
+                        "id": "addnumbers-input0-addnumbers-number",
+                        "name": "firstNumber",
+                        "label": "firstNumber",
+                        "type": "number",
+                        "additionalParams": true
+                    },
+                    {
+                        "id": "addnumbers-input1-addnumbers-number",
+                        "name": "secNumber",
+                        "label": "secNumber",
+                        "type": "number",
+                        "additionalParams": true
+                    }
+                ],
+                "inputData": {
+                    "firstNumber": "{{variable0.data.instance}}",
+                    "secNumber": "{{variable1.data.instance}}"
+                },
+                "outputControls": [
+                    {
+                        "id": "additionComplete",
+                        "name": "additionComplete",
+                        "label": "Addition Complete",
+                        "type": "number"
+                    }
+                ],
+                "inputControls": [
+                    {
+                        "name": "default",
+                        "id": "addnumbers-input-control-default",
+                        "label": "End Control Input"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "id": "addnumbers0-output0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "variable0",
+            "data": {
+                "name": "variable",
+                "label": "Variable",
+                "inputs": [
+                    {
+                        "id": "variable0-input0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number",
+                        "additionalParams": true
+                    }
+                ],
+                "outputs": [
+                    {
+                        "id": "variable0-output0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number"
+                    }
+                ],
+                "inputData": {
+                    "number": 2
+                },
+                "outputControls": []
+            }
+        },
+        {
+            "id": "variable1",
+            "data": {
+                "name": "variable",
+                "label": "Variable",
+                "inputs": [
+                    {
+                        "id": "variable1-input0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number",
+                        "additionalParams": true
+                    }
+                ],
+                "outputs": [
+                    {
+                        "id": "variable1-output0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number"
+                    }
+                ],
+                "inputData": {
+                    "number": 3
+                },
+                "outputControls": []
+            }
+        },
+        {
+            "id": "variable3",
+            "data": {
+                "name": "variable",
+                "label": "Variable",
+                "inputs": [
+                    {
+                        "id": "variable3-input0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number",
+                        "additionalParams": true
+                    }
+                ],
+                "outputs": [
+                    {
+                        "id": "variable3-output0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number"
+                    }
+                ],
+                "inputData": {
+                    "number": 7
+                },
+                "outputControls": []
+            }
+        }
+    ],
+    "edges": [
+        {
+            "source": "variable0",
+            "sourceHandle": "variable1-output0",
+            "target": "addnumbers0",
+            "targetHandle": "addnumbers-input0-addnumbers-number",
+            "type": "buttonedge",
+            "id": "start0-addnumbers0-input-control-default"
+        },
+        {
+            "source": "variable1",
+            "sourceHandle": "start0-output-control-default",
+            "target": "addnumbers0",
+            "targetHandle": "addnumbers-input1-addnumbers-number",
+            "type": "buttonedge",
+            "id": "start0-addTwoNumbers0-input-default"
+        },
+        {
+            "source": "addnumbers0",
+            "sourceHandle": "additionComplete",
+            "target": "addnumbers1",
+            "targetHandle": "addnumbers1-input-control-default",
+            "type": "buttonedge",
+            "id": "addnumbers0-addnumbers1-input-control-default"
+        },
+        {
+            "source": "variable3",
+            "sourceHandle": "variable3-output0",
+            "target": "addnumbers1",
+            "targetHandle": "addnumbers1-input0-addnumbers-number",
+            "type": "buttonedge",
+            "id": "variable3-addnumbers0-input-control-default"
+        },
+        {
+            "source": "addnumbers0",
+            "sourceHandle": "addnumbers0-output0",
+            "target": "addnumbers1",
+            "targetHandle": "addnumbers1-input1-addnumbers-number",
+            "type": "buttonedge",
+            "id": "addnumbers0-addnumbers1-input-control-default"
+        }
+    ]
+}

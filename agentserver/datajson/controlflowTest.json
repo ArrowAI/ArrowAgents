@@ -47,8 +47,8 @@
                                     "type": "number"
                                 }
                             ],
-                            "inputData":{
-                                "number":2
+                            "inputData": {
+                                "number": 2
                             },
                             "outputControls": []
                         }
@@ -75,8 +75,8 @@
                                     "type": "number"
                                 }
                             ],
-                            "inputData":{
-                                "number":3
+                            "inputData": {
+                                "number": 3
                             },
                             "outputControls": []
                         }
@@ -102,17 +102,18 @@
                                     "additionalParams": true
                                 }
                             ],
-                          
                             "inputData": {
                                 "firstNumber": "{{variable0.data.instance}}",
                                 "secNumber": "{{variable1.data.instance}}"
                             },
-                            "outputControls": [{
-                                "id": "additionComplete0",
-                                "name": "additionComplete",
-                                "label": "Addition Complete",
-                                "type": "number"
-                            }],
+                            "outputControls": [
+                                {
+                                    "id": "additionComplete",
+                                    "name": "additionComplete",
+                                    "label": "Addition Complete",
+                                    "type": "number"
+                                }
+                            ],
                             "inputControls": [
                                 {
                                     "name": "default",
@@ -120,7 +121,14 @@
                                     "label": "End Control Input"
                                 }
                             ],
-                            "outputs": []
+                            "outputs": [
+                                {
+                                    "id": "addnumbers0-output0",
+                                    "name": "number",
+                                    "label": "number",
+                                    "type": "number"
+                                }
+                            ]
                         }
                     },
                     {
@@ -145,8 +153,8 @@
                                     "type": "number"
                                 }
                             ],
-                            "inputData":{
-                                "number":7
+                            "inputData": {
+                                "number": 7
                             },
                             "outputControls": []
                         }
@@ -186,7 +194,7 @@
                             ],
                             "outputControls": [
                                 {
-                                    "id": "additionComplete0",
+                                    "id": "additionComplete",
                                     "name": "additionComplete",
                                     "label": "Addition Complete",
                                     "type": "number"
@@ -218,7 +226,7 @@
                         "target": "addnumbers0",
                         "targetHandle": "addnumbers-input1-addnumbers-number",
                         "type": "buttonedge",
-                        "id": "start0-addTwoNumbers0-input-default"
+                        "id": "variable1-addTwoNumbers0-input-default"
                     },
                     {
                         "source": "addnumbers0",
@@ -234,16 +242,17 @@
                         "target": "addnumbers1",
                         "targetHandle": "addnumbers1-input0-addnumbers-number",
                         "type": "buttonedge",
-                        "id": "start0-addnumbers0-input-control-default"
+                        "id": "variable3-addnumbers0-input-control-default"
                     },
                     {
-                        "source": "addnumbers1",
-                        "sourceHandle": "additionComplete0",
+                        "source": "addnumbers0",
+                        "sourceHandle": "addnumbers0-output0",
                         "target": "addnumbers1",
                         "targetHandle": "addnumbers1-input1-addnumbers-number",
                         "type": "buttonedge",
-                        "id": "addTwoNumbers0-input-default"
+                        "id": "addnumbers0-addnumbers1-input-control-default"
                     }
+                    
                 ]
             }
         }
