@@ -85,7 +85,7 @@ export class Flow {
 
         // Get the IDs of the input data nodes connected to the current node
         let inputDataIds = currentNode.data.inputs.map((input: any) => input.id);
-        console.log("conneted datanodes ids")
+        // console.log("conneted datanodes ids")
         console.log(inputDataIds);
 
         // Initialize an array to store the IDs of the connected nodes
@@ -159,7 +159,7 @@ export class Flow {
         let subGraphNodeIds = new Set([nodeId]);
         // Create a helper function to perform DFS
         let allDataNodeIds = this.getConnectedDataNodeIds(nodeId);
-        console.log("allDataNodeIds", allDataNodeIds);
+        // console.log("allDataNodeIds", allDataNodeIds);
         let nodes = allDataNodeIds.map((id: string) => this.nodes.find((n: any) => n.id === id));
         var self = this;
         // Add Current Node to Node list as nodes are all datanodes direactly connected to the current node or its child
@@ -239,7 +239,7 @@ export class Flow {
             })
         })
 
-        console.log("edges to remove", edgesToRemove)
+        // console.log("edges to remove", edgesToRemove)
         // Filter out the nodes to remove
         const filteredNodes = graphJson.nodes.filter((node: any) => !nodesToRemove.includes(node.id));
 
@@ -503,7 +503,7 @@ export class Flow {
                     const isAcceptVariable = reactFlowNodeData.inputs.find((param: any) => param.name === key)?.acceptVariable ?? false
                     // console.log(isAcceptVariable)
                     const resolvedInstance = this.getVariableValue(paramValue, reactFlowNodes, question, chatHistory, isAcceptVariable)
-                    console.log("resolvedInstance", resolvedInstance)
+                    // console.log("resolvedInstance", resolvedInstance)
                     paramsObj[key] = resolvedInstance
                 }
             }
@@ -613,7 +613,7 @@ export class Flow {
                 let flowNodeData = cloneDeep(reactFlowNode.data)
                 // if (overrideConfig) flowNodeData = this.replaceInputsWithConfig(flowNodeData, overrideConfig)
                 const reactFlowNodeData: any = this.resolveVariables(flowNodeData, flowNodes, question, chatHistory);
-                console.log("reactFlowNodeData", JSON.stringify(reactFlowNodeData))
+                // console.log("reactFlowNodeData", JSON.stringify(reactFlowNodeData))
                 let outputResult: any = await newNodeInstance.init(reactFlowNodeData, question, {
                     chatId,
                     sessionId,
@@ -627,15 +627,15 @@ export class Flow {
                 })
 
                 // Save dynamic variables
-                if (reactFlowNode.data.name === 'setVariable') {
-                    const dynamicVars = outputResult?.dynamicVariables ?? {}
+                // if (reactFlowNode.data.name === 'setVariable') {
+                //     const dynamicVars = outputResult?.dynamicVariables ?? {}
 
-                    for (const variableKey in dynamicVars) {
-                        dynamicVariables[variableKey] = dynamicVars[variableKey]
-                    }
+                //     for (const variableKey in dynamicVars) {
+                //         dynamicVariables[variableKey] = dynamicVars[variableKey]
+                //     }
 
-                    outputResult = outputResult?.output
-                }
+                //     outputResult = outputResult?.output
+                // }
                 // Determine which nodes to route next when it comes to ifElse
                 if (reactFlowNode.data.name === 'ifElseFunction' && typeof outputResult === 'object') {
 

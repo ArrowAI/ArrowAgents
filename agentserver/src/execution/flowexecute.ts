@@ -35,9 +35,9 @@ export class FlowExecuteHandler {
             throw new Error('No main function found');
         }
         else {
-            console.log(mainFunction);
+            // console.log(mainFunction);
             let currentNode: INode = mainFunction.flow.nodes.find((node: any) => node.data.name === 'Start');
-            console.log(currentNode)
+            // console.log(currentNode)
             return await this.iterateGraph(mainFunction.flow, currentNode, executionState, 'default');
         }
 
@@ -46,7 +46,7 @@ export class FlowExecuteHandler {
     async iterateGraph(flow: Flow, currentNode: INode, executionState: FlowState, outputcontrolName: string = "default") {
         try {
             let nodeToExecute: INode | null = flow.getNextControlNode(currentNode.id, outputcontrolName);
-            console.log("current node", nodeToExecute)
+            // console.log("current node", nodeToExecute)
 
             // console.log("next control node to execute",nodeToExecute?.id)
             if (nodeToExecute != null) {
@@ -91,15 +91,16 @@ export class FlowExecuteHandler {
             depthQueue = Object.assign(depthQueue, res.depthQueue)
         }
         startingNodeIds = [...new Set(startingNodeIds)]
-        console.log(endingNodeIds)
+        // console.log(endingNodeIds)
 
         const startingNodes = subgraph.nodes.filter((nd: any) => startingNodeIds.includes(nd.id));
 
-        console.log(startingNodes);
+        // console.log(startingNodes);
 
         let componentNodes: any = {
             variable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/NumberVariable/index.ts" },
-            addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/Sum/index.ts" }
+            addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/Sum/index.ts" },
+            setVariable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/SetVariable/index.ts" }
         }
         /*** BFS to traverse from Starting Nodes to Ending Node ***/
         const flowNodes = await flow.processConnectedDataNodes(startingNodeIds, subgraph.nodes, subgraph.edges, graph, depthQueue, componentNodes, "", [], "chatId", "sessionId" ?? '', subgraph.id, {}, executionState);
@@ -109,18 +110,19 @@ export class FlowExecuteHandler {
         const reactFlowNodeData: any = flow.resolveVariables(nodeToExecute.data, flowNodes, "", []);
       
         let nodeToExecuteData: any = reactFlowNodeData;
-        console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
+        // console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
+        // console.log("node is ",nodeToExecuteData.name)
         const nodeInstanceFilePath = componentNodes[nodeToExecuteData.name].filePath as string
         const nodeModule = await import(nodeInstanceFilePath)
         const nodeInstance = new nodeModule.nodeClass();
         this.subscribeOutputControlNode()
-        console.log(reactFlowNodeData)
-        console.log(nodeToExecuteData);
+        // console.log(reactFlowNodeData)
+        // console.log(nodeToExecuteData);
         if (nodeToExecute.id == 'addnumbers1')
             return
         let result = await nodeInstance.run(nodeToExecuteData, "", executionState);
         // console.log("final result", result);
-        return result;
+        // return result;
     }
     async executeDataGraph() {
 
@@ -134,7 +136,7 @@ export class FlowExecuteHandler {
                 // Handle the emitted value from the output control node
                 console.log('Received value from output control node:', output.outputcontrolPinId,);
                 let currentNode = flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
-                console.log("current node is", currentNode.id)
+                // console.log("current node is", currentNode.id)
                 // return;
                 await this.iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
             },

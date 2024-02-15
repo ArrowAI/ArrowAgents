@@ -132,6 +132,40 @@
                         }
                     },
                     {
+                        "id": "setVariable1",
+                        "data": {
+                            "name": "setVariable",
+                            "label": "SetVariable",
+                            "inputs": [{
+                                "id": "setVariable-input0",
+                                "name": "variable",
+                                "label": "variable",
+                                "type": "number"
+                            }],
+                            "inputData": {
+                                "variable": "{{addnumbers0.data.instance}}",
+                                "variableName": "numbtester"
+                            },
+                            "outputControls": [
+                                {
+                                    "name": "default",
+                                    "id": "default",
+                                    "label": "End Control Output"
+                                }
+                            ],
+                            "inputControls": [
+                                {
+                                    "name": "default",
+                                    "id": "setVariable1-input-control-default",
+                                    "label": " Control Input"
+
+                                }
+                            ],    
+                            "outputs": []
+                        }
+                    },
+
+                    {
                         "id": "variable3",
                         "data": {
                             "name": "variable",
@@ -231,10 +265,26 @@
                     {
                         "source": "addnumbers0",
                         "sourceHandle": "additionComplete",
+                        "target": "setVariable1",
+                        "targetHandle": "setVariable1-input-control-default",
+                        "type": "buttonedge",
+                        "id": "addnumbers0-setVariable1-input-control-default"
+                    },
+                    {
+                        "source": "setVariable1",
+                        "sourceHandle": "default",
                         "target": "addnumbers1",
                         "targetHandle": "addnumbers1-input-control-default",
                         "type": "buttonedge",
                         "id": "addnumbers0-addnumbers1-input-control-default"
+                    },
+                    {
+                        "source": "addnumbers0",
+                        "sourceHandle": "addnumbers0-output0",
+                        "target": "setVariable1",
+                        "targetHandle": "setVariable-input0",
+                        "type": "buttonedge",
+                        "id": "addnumbers0-setVariable1-input-control-default"
                     },
                     {
                         "source": "variable3",

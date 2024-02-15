@@ -15,7 +15,7 @@ export class addnumbers {
     inputs: any[]
     outputs: any[]
     constructor() {
-        console.log("Sum");
+        // console.log("Sum");
         this.name = "Sum";
         this.label = "Sum";
         this.description = "Sum of two input varibale",

@@ -46,11 +46,18 @@ const iterateGraph = async (flow: Flow, currentNode: INode, executionState: Flow
 const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionState: FlowState) => {
     executionState.flow = flow
     executionState.currentNodeId = nodeToExecute.id;
+    console.log(executionState.currentNodeId)
     let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
+
+    subgraph = flow.removeConnectedNodesWithInputControls(subgraph, nodeToExecute.id);
+    console.log("subgraph of current control node", subgraph)
+
+    // return
     // Logic From Flowise as now subgraph is same sa Flowise flow  
     const { graph, nodeDependencies } = flow.constructGraphs(subgraph.nodes, subgraph.edges);
     const directedGraph = graph
     const endingNodeIds = flow.getEndingNodes(nodeDependencies, directedGraph);
+
     //console.log("ending node id", endingNodeIds)
     if (!endingNodeIds.length) return (`Ending nodes not found`);
     const endingNodes = subgraph.nodes.filter((nd: any) => endingNodeIds.includes(nd.id));
@@ -65,11 +72,16 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
         depthQueue = Object.assign(depthQueue, res.depthQueue)
     }
     startingNodeIds = [...new Set(startingNodeIds)]
+    // console.log(endingNodeIds)
+
     const startingNodes = subgraph.nodes.filter((nd: any) => startingNodeIds.includes(nd.id));
-    // console.log(startingNodes)
+
+    // console.log(startingNodes);
+
     let componentNodes: any = {
-        variable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/numberVariable.ts" },
-        addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/sum.ts" }
+        variable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/NumberVariable/index.ts" },
+        addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/Sum/index.ts" },
+        setVariable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/SetVariable/index.ts" }
     }
     /*** BFS to traverse from Starting Nodes to Ending Node ***/
     const flowNodes = await flow.processConnectedDataNodes(startingNodeIds, subgraph.nodes, subgraph.edges, graph, depthQueue, componentNodes, "", [], "chatId", "sessionId" ?? '', subgraph.id, {}, executionState);
@@ -77,15 +89,21 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
     nodeToExecute = endingNodeIds.length === 1 ? flowNodes.find((node: any) => endingNodeIds[0] === node.id) : flowNodes[flowNodes.length - 1]
     if (!nodeToExecute) return new Error("Node not found")
     const reactFlowNodeData: any = flow.resolveVariables(nodeToExecute.data, flowNodes, "", []);
+  
     let nodeToExecuteData: any = reactFlowNodeData;
-    console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
+    // console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
+    // console.log("node is ",nodeToExecuteData.name)
     const nodeInstanceFilePath = componentNodes[nodeToExecuteData.name].filePath as string
     const nodeModule = await import(nodeInstanceFilePath)
     const nodeInstance = new nodeModule.nodeClass();
     subscribeOutputControlNode()
+    // console.log(reactFlowNodeData)
+    // console.log(nodeToExecuteData);
+    if (nodeToExecute.id == 'addnumbers1')
+        return
     let result = await nodeInstance.run(nodeToExecuteData, "", executionState);
     // console.log("final result", result);
-    return result;
+    // return result;
 }
 
 const subscribeOutputControlNode = () => {
