@@ -1,5 +1,5 @@
-import { FlowState } from "../../agentserver/src/engine/flowexecutorstore"
-import { getOutputControlObservable } from "../../agentserver/src/execution/flowexecute"
+import { FlowState } from "../../engine/src/lib/flow"
+import { getOutputControlObservable } from "../../engine/src"
 
 
 export class setVariable {

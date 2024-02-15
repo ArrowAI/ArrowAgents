@@ -1,5 +1,4 @@
 
-import { BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs';
 import { Activity, Flow, FlowState, Function, INode, OutputControlObservableValue } from './lib/flow';
 let subject = new Subject<any>();
@@ -7,8 +6,8 @@ let subject = new Subject<any>();
 export function getOutputControlObservable(): Subject<any> {
     return subject
 }
-export const execute = (json: any) => {
-    startActivity(json, {
+export const execute = async (json: any) => {
+   await startActivity(json, {
         context: {}, currentNodeId: '',
         flowId: "",
         flow: undefined
@@ -77,9 +76,8 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
     const startingNodes = subgraph.nodes.filter((nd: any) => startingNodeIds.includes(nd.id));
 
     // console.log(startingNodes);
-
     let componentNodes: any = {
-        variable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/NumberVariable/index.ts" },
+        variable: { filePath: "@arrowagents/varible" },
         addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/Sum/index.ts" },
         setVariable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/SetVariable/index.ts" }
     }
@@ -103,7 +101,7 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
         return
     let result = await nodeInstance.run(nodeToExecuteData, "", executionState);
     // console.log("final result", result);
-    // return result;
+    return result;
 }
 
 const subscribeOutputControlNode = () => {
@@ -114,10 +112,10 @@ const subscribeOutputControlNode = () => {
             // Handle the emitted value from the output control node
             console.log('Received value from output control node:', output.outputcontrolPinId,);
             // return;
-            // let currentNode =flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
-            // console.log("nex node to execute",currentNode.id)
+            let currentNode =flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
+            console.log("current Node Id",currentNode.id)
             // return
-            // await this.iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
+            await iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
         },
         error: (err: any) => {
             // Handle any errors that occur during the subscription
@@ -132,3 +130,9 @@ const subscribeOutputControlNode = () => {
     // Store the subscription somewhere if you need to unsubscribe later
     // context.subscriptions.push(subscription);
 }
+
+var workflow = require('./../../agentserver/datajson/controlflowTest.json');
+
+ execute(workflow).then((result) => {
+     console.log(result)
+ })

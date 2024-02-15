@@ -222,7 +222,7 @@
                             "inputControls": [
                                 {
                                     "name": "default",
-                                    "id": "addnumbers1-input-control-default",
+                                    "id": "default",
                                     "label": "End Control Input"
                                 }
                             ],

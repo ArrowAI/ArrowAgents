@@ -86,7 +86,7 @@ export class Flow {
         // Get the IDs of the input data nodes connected to the current node
         let inputDataIds = currentNode.data.inputs.map((input: any) => input.id);
         // console.log("conneted datanodes ids")
-        console.log(inputDataIds);
+        // console.log(inputDataIds);
 
         // Initialize an array to store the IDs of the connected nodes
         let connectedNodeIds: string[] = [];
@@ -228,7 +228,7 @@ export class Flow {
                     nodesToRemove.push(node.id);
             }
         })
-        console.log("nodes to remove", nodesToRemove)
+        // console.log("nodes to remove", nodesToRemove)
         graphJson.edges.forEach((edge: any) => {
             nodesToRemove.forEach((nodeId: string) => {
                 if (nodeId === edge.target  || nodeId === edge.source) {

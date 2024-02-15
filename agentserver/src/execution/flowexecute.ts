@@ -55,7 +55,7 @@ export class FlowExecuteHandler {
 
             }
             else {
-                console.log("no control node found after current node after", outputcontrolName)
+                console.log("no control node found after current node after",currentNode.id, outputcontrolName)
             }
         } catch (error) {
             console.log(error)
@@ -65,7 +65,7 @@ export class FlowExecuteHandler {
     async executeControlNode(flow: Flow, nodeToExecute: INode, executionState: FlowState) {
         executionState.flow = flow
         executionState.currentNodeId = nodeToExecute.id;
-        console.log(executionState.currentNodeId)
+        // console.log(executionState.currentNodeId)
         let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
 
         subgraph = flow.removeConnectedNodesWithInputControls(subgraph, nodeToExecute.id);
@@ -118,6 +118,7 @@ export class FlowExecuteHandler {
         this.subscribeOutputControlNode()
         // console.log(reactFlowNodeData)
         // console.log(nodeToExecuteData);
+        console.log(nodeToExecute.id)
         if (nodeToExecute.id == 'addnumbers1')
             return
         let result = await nodeInstance.run(nodeToExecuteData, "", executionState);
@@ -134,9 +135,9 @@ export class FlowExecuteHandler {
             next: async (output: OutputControlObservableValue) => {
                 let flow = output.flowState.flow;
                 // Handle the emitted value from the output control node
-                console.log('Received value from output control node:', output.outputcontrolPinId,);
+                console.log('Received value from output control node:', output.outputcontrolPinId,output.flowState.currentNodeId);
                 let currentNode = flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
-                // console.log("current node is", currentNode.id)
+                console.log("current node is", currentNode.id)
                 // return;
                 await this.iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
             },
