@@ -621,8 +621,8 @@ export class Flow {
 
             try {
                 //TODO: Check How to handle node path 
-                const nodeInstanceFilePath = componentNodes[reactFlowNode.data.name].filePath as string
-                // console.log("nodeInstanceFilePath",nodeInstanceFilePath)
+                const nodeInstanceFilePath = componentNodes[reactFlowNode.data.name] as string
+                console.log("nodeInstanceFilePath",nodeInstanceFilePath)
                 const nodeModule = await import(nodeInstanceFilePath);
                 // console.log(nodeModule)
                 const newNodeInstance = new nodeModule.nodeClass()

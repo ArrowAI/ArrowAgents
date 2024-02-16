@@ -75,9 +75,9 @@
     "useUnknownInCatchVariables": false
   },
   "include": [
-    "index.ts"
+    "*.ts"
   ],
   "exclude": [
-
+    "src/public/"
   ]
 }

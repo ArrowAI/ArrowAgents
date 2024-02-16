@@ -1,6 +1,6 @@
 import { sum } from "lodash"
-import { FlowState } from "../../engine/src/lib/flow"
-import { getOutputControlObservable } from "../../engine/src"
+// import { FlowState } from "../../engine/src/lib/flow"
+// import { getOutputControlObservable } from "../../engine/src"
 
 
 export class addnumbers {
@@ -20,7 +20,7 @@ export class addnumbers {
         this.label = "Sum";
         this.description = "Sum of two input varibale",
 
-            this.version = 1;
+        this.version = 1;
 
         this.type = "Variable";
         this.inputs = [];
@@ -54,7 +54,7 @@ export class addnumbers {
 
 
     }
-    run(nodeData: any, input: string, flowState: FlowState) {
+    run(nodeData: any, input: string, flowState: any) {
         const firstNumber = nodeData.inputData?.firstNumber as string
         const secNumber = nodeData.inputData?.secNumber as string;
 
@@ -65,7 +65,7 @@ export class addnumbers {
                 sum: result
             }
         }
-        const outputControlObservable = getOutputControlObservable();
+        const outputControlObservable = flowState.context.OutputControlObservable;
         outputControlObservable.next({
             nodeId: nodeData.id,
             outputcontrolPinId: "additionComplete",

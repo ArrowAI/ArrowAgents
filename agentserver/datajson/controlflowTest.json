@@ -134,8 +134,8 @@
                     {
                         "id": "setVariable1",
                         "data": {
-                            "name": "setVariable",
-                            "label": "SetVariable",
+                            "name": "setvariable",
+                            "label": "setvariable",
                             "inputs": [{
                                 "id": "setVariable-input0",
                                 "name": "variable",

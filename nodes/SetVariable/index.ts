@@ -1,5 +1,4 @@
-import { FlowState } from "../../engine/src/lib/flow"
-import { getOutputControlObservable } from "../../engine/src"
+
 
 
 export class setVariable {
@@ -42,11 +41,11 @@ export class setVariable {
         // Not used
         return undefined
     }
-    run(nodeData: any, input: string, flowState: FlowState) {
+    run(nodeData: any, input: string, flowState: any) {
         const inputRaw = nodeData.inputData?.input
         const variableName = nodeData.inputData?.variableName as string
         flowState.context = { ...flowState.context, ... { [variableName]: inputRaw } }
-        const outputControlObservable = getOutputControlObservable();
+        const outputControlObservable =  flowState.context.OutputControlObservable;
         outputControlObservable.next({
             nodeId: nodeData.id,
             outputcontrolPinId: "default",
