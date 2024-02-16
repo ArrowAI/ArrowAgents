@@ -1,0 +1,19 @@
+{
+    "label": "Variable",
+    "name": "Variable",
+    "version": 1,
+    "description": "Variable",
+    "type": "Variable",
+    "inputs": [],
+    "icon": "",
+    "category": "",
+    "baseClasses": [],
+    "outputs": [
+        {
+            "name": "Input",
+            "label": "Input",
+            "type": "number",
+            "additionalParams": true
+        }
+    ]
+}

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setVariable = void 0;
-const src_1 = require("../../engine/src");
 class setVariable {
     constructor() {
         this.label = "SetVariable";
@@ -34,7 +33,7 @@ class setVariable {
         const inputRaw = (_a = nodeData.inputData) === null || _a === void 0 ? void 0 : _a.input;
         const variableName = (_b = nodeData.inputData) === null || _b === void 0 ? void 0 : _b.variableName;
         flowState.context = Object.assign(Object.assign({}, flowState.context), { [variableName]: inputRaw });
-        const outputControlObservable = (0, src_1.getOutputControlObservable)();
+        const outputControlObservable = flowState.context.OutputControlObservable;
         outputControlObservable.next({
             nodeId: nodeData.id,
             outputcontrolPinId: "default",

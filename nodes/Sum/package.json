@@ -1,5 +1,5 @@
 {
-  "name": "@arrowagents/setvariable",
+  "name": "@arrowagents/addnumbers",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,10 +10,15 @@
     "build": "tsc"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.11.19",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "publishConfig": {
-    "access": "public"  
+    "access": "public"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   }
 }

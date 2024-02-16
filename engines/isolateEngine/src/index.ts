@@ -7,7 +7,8 @@ export function getOutputControlObservable(): Subject<any> {
     return subject
 }
 export const execute = async (json: any) => {
-   await startActivity(json, {
+    //
+    await startActivity(json, {
         context: {}, currentNodeId: '',
         flowId: "",
         flow: undefined
@@ -49,7 +50,7 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
     let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
 
     subgraph = flow.removeConnectedNodesWithInputControls(subgraph, nodeToExecute.id);
-    console.log("subgraph of current control node", subgraph)
+    // console.log("subgraph of current control node", subgraph)
 
     // return
     // Logic From Flowise as now subgraph is same sa Flowise flow  
@@ -77,9 +78,9 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
 
     // console.log(startingNodes);
     let componentNodes: any = {
-        variable: { filePath: "@arrowagents/varible" },
-        addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/Sum/index.ts" },
-        setVariable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/SetVariable/index.ts" }
+        variable: "@arrowagents/variable",
+        addnumbers: "@arrowagents/addnumbers",
+        setvariable: "@arrowagents/setvariable"
     }
     /*** BFS to traverse from Starting Nodes to Ending Node ***/
     const flowNodes = await flow.processConnectedDataNodes(startingNodeIds, subgraph.nodes, subgraph.edges, graph, depthQueue, componentNodes, "", [], "chatId", "sessionId" ?? '', subgraph.id, {}, executionState);
@@ -87,16 +88,20 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
     nodeToExecute = endingNodeIds.length === 1 ? flowNodes.find((node: any) => endingNodeIds[0] === node.id) : flowNodes[flowNodes.length - 1]
     if (!nodeToExecute) return new Error("Node not found")
     const reactFlowNodeData: any = flow.resolveVariables(nodeToExecute.data, flowNodes, "", []);
-  
+
     let nodeToExecuteData: any = reactFlowNodeData;
     // console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
     // console.log("node is ",nodeToExecuteData.name)
-    const nodeInstanceFilePath = componentNodes[nodeToExecuteData.name].filePath as string
-    const nodeModule = await import(nodeInstanceFilePath)
+    const nodeNoduleName = componentNodes[nodeToExecuteData.name] as string
+    console.log("name of module", nodeNoduleName)
+    return
+    const nodeModule = await import(nodeNoduleName)
     const nodeInstance = new nodeModule.nodeClass();
     subscribeOutputControlNode()
     // console.log(reactFlowNodeData)
     // console.log(nodeToExecuteData);
+
+    executionState.context.OutputControlObservable = getOutputControlObservable()
     if (nodeToExecute.id == 'addnumbers1')
         return
     let result = await nodeInstance.run(nodeToExecuteData, "", executionState);
@@ -112,8 +117,8 @@ const subscribeOutputControlNode = () => {
             // Handle the emitted value from the output control node
             console.log('Received value from output control node:', output.outputcontrolPinId,);
             // return;
-            let currentNode =flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
-            console.log("current Node Id",currentNode.id)
+            let currentNode = flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
+            console.log("current Node Id", currentNode.id)
             // return
             await iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
         },
@@ -131,8 +136,10 @@ const subscribeOutputControlNode = () => {
     // context.subscriptions.push(subscription);
 }
 
-var workflow = require('./../../agentserver/datajson/controlflowTest.json');
+execute({})
 
- execute(workflow).then((result) => {
-     console.log(result)
- })
+// var workflow = require('./../../agentserver/datajson/controlflowTest.json');
+
+// execute(workflow).then((result) => {
+//     console.log(result)
+// })
