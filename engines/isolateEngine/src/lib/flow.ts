@@ -424,7 +424,7 @@ export class Flow {
         isAcceptVariable = false
     ) => {
         let returnVal = paramValue
-        const variableStack = []
+        const variableStack:any = []
         const variableDict = {} as any
         let startIdx = 0
         const endIdx = returnVal.length - 1
@@ -508,7 +508,7 @@ export class Flow {
             for (const key in paramsObj) {
                 const paramValue: string = paramsObj[key];
                 if (Array.isArray(paramValue)) {
-                    const resolvedInstances = []
+                    const resolvedInstances:any = []
                     for (const param of paramValue) {
                         const resolvedInstance = this.getVariableValue(param, reactFlowNodes, question, chatHistory)
                         resolvedInstances.push(resolvedInstance)

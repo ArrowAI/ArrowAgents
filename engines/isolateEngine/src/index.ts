@@ -3,16 +3,34 @@ import { Subject } from 'rxjs';
 import { Activity, Flow, FlowState, Function, INode, OutputControlObservableValue } from './lib/flow';
 let subject = new Subject<any>();
 // Assuming you have a way to get the output control node observable based on nodeId and outputcontrolPinId
+
+const writeToJsonFile = async (filePath: string, obj: unknown) => {
+    const serializedObj = JSON.stringify(obj, (_key: string, value: unknown) => {
+        if (value instanceof Map) {
+            return Object.fromEntries(value)
+        }
+        else {
+            return value
+        }
+    })
+
+}
+
 export function getOutputControlObservable(): Subject<any> {
     return subject
 }
 export const execute = async (json: any) => {
     //
-    await startActivity(json, {
+    let jsonResponse = await startActivity(json, {
         context: {}, currentNodeId: '',
         flowId: "",
         flow: undefined
     })
+    let writeVariable='node:fs/promises'
+    let { writeFile } = await import(writeVariable);
+    await writeFile('./output.json',JSON.stringify(jsonResponse), 'utf-8')
+    // await writeToJsonFile('./output.json', jsonResponse)
+
 }
 
 const startActivity = async (activity: any, executionState: FlowState) => {
@@ -37,9 +55,13 @@ const iterateGraph = async (flow: Flow, currentNode: INode, executionState: Flow
         }
         else {
             console.log("no control node found after current node after", outputcontrolName)
+
+            return nodeToExecute
         }
     } catch (error) {
         console.log(error)
+        return error
+       
     }
 
 }
@@ -50,7 +72,7 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
     let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
 
     subgraph = flow.removeConnectedNodesWithInputControls(subgraph, nodeToExecute.id);
-    // console.log("subgraph of current control node", subgraph)
+    console.log("subgraph of current control node", subgraph)
 
     // return
     // Logic From Flowise as now subgraph is same sa Flowise flow  
@@ -93,8 +115,7 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
     // console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
     // console.log("node is ",nodeToExecuteData.name)
     const nodeNoduleName = componentNodes[nodeToExecuteData.name] as string
-    console.log("name of module", nodeNoduleName)
-    return
+
     const nodeModule = await import(nodeNoduleName)
     const nodeInstance = new nodeModule.nodeClass();
     subscribeOutputControlNode()
@@ -103,10 +124,10 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
 
     executionState.context.OutputControlObservable = getOutputControlObservable()
     if (nodeToExecute.id == 'addnumbers1')
-        return
+        return nodeToExecuteData
     let result = await nodeInstance.run(nodeToExecuteData, "", executionState);
     // console.log("final result", result);
-    return result;
+    return nodeToExecuteData;
 }
 
 const subscribeOutputControlNode = () => {
@@ -136,10 +157,10 @@ const subscribeOutputControlNode = () => {
     // context.subscriptions.push(subscription);
 }
 
-execute({})
+// execute({})
 
-// var workflow = require('./../../agentserver/datajson/controlflowTest.json');
+var workflow = require('./../../../agentserver/datajson/controlflowTest.json');
 
-// execute(workflow).then((result) => {
-//     console.log(result)
-// })
+execute(workflow).then((result) => {
+    console.log(result)
+})

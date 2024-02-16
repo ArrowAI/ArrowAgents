@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ../engine
+cd ../engines/isolateEngine
 npm install
 npm run build
 
@@ -15,7 +15,7 @@ cd ../..
 #         cd ../..
 #     fi
 # done
-cd engine/dist
+cd isolateEngine/dist
 # @arrowagents/variable","@arrowagents/setvariable","@arrowagents/addnumbers
 # npm install ../../nodes/NumberVariable
 # npm install ../../nodes/Sum
@@ -23,6 +23,6 @@ cd engine/dist
 # npm install ../../nodes/GetVariable
 
 # zip engine/dist
-zip -r ../../engine.zip ./*
+zip -r ../../../engine.zip ./*
 
 

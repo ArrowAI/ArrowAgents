@@ -1,7 +1,7 @@
 const path = require('path');
-
+const IgnoreDynamicRequire = require('webpack-ignore-dynamic-require');
 module.exports = {
-  entry: './src/index.ts', 
+  entry: './src/index.ts',
   module: {
     rules: [
       {
@@ -12,10 +12,13 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [ '.ts', '.js'],
+    extensions: ['.ts', '.js']
   },
   output: {
-    filename: 'bundle.js',
+    filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  plugins: [
+    new IgnoreDynamicRequire()
+  ]
 };
