@@ -14,7 +14,7 @@ export class addnumbers {
     inputs: any[]
     outputs: any[]
     constructor() {
-        console.log("Sum");
+        // console.log("Sum");
         this.name = "Sum";
         this.label = "Sum";
         this.description = "Sum of two input varibale",
@@ -58,7 +58,7 @@ export class addnumbers {
         const secNumber = nodeData.inputData?.secNumber as string;
 
         let result = sum([Number(firstNumber), Number(secNumber)]);
-        console.log("Sum result: " + result);
+        // console.log("Sum result: " + result);
         flowState.context[nodeData.name] = {
             "outputData": {
                 sum: result

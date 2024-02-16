@@ -1,5 +1,4 @@
 
-import { BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs';
 import { Activity, Flow, FlowState, Function, INode, OutputControlObservableValue } from './lib/flow';
 let subject = new Subject<any>();
@@ -7,8 +6,8 @@ let subject = new Subject<any>();
 export function getOutputControlObservable(): Subject<any> {
     return subject
 }
-export const execute = (json: any) => {
-    startActivity(json, {
+export const execute = async (json: any) => {
+   await startActivity(json, {
         context: {}, currentNodeId: '',
         flowId: "",
         flow: undefined
@@ -46,11 +45,18 @@ const iterateGraph = async (flow: Flow, currentNode: INode, executionState: Flow
 const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionState: FlowState) => {
     executionState.flow = flow
     executionState.currentNodeId = nodeToExecute.id;
+    console.log(executionState.currentNodeId)
     let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
+
+    subgraph = flow.removeConnectedNodesWithInputControls(subgraph, nodeToExecute.id);
+    console.log("subgraph of current control node", subgraph)
+
+    // return
     // Logic From Flowise as now subgraph is same sa Flowise flow  
     const { graph, nodeDependencies } = flow.constructGraphs(subgraph.nodes, subgraph.edges);
     const directedGraph = graph
     const endingNodeIds = flow.getEndingNodes(nodeDependencies, directedGraph);
+
     //console.log("ending node id", endingNodeIds)
     if (!endingNodeIds.length) return (`Ending nodes not found`);
     const endingNodes = subgraph.nodes.filter((nd: any) => endingNodeIds.includes(nd.id));
@@ -65,11 +71,15 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
         depthQueue = Object.assign(depthQueue, res.depthQueue)
     }
     startingNodeIds = [...new Set(startingNodeIds)]
+    // console.log(endingNodeIds)
+
     const startingNodes = subgraph.nodes.filter((nd: any) => startingNodeIds.includes(nd.id));
-    // console.log(startingNodes)
+
+    // console.log(startingNodes);
     let componentNodes: any = {
-        variable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/numberVariable.ts" },
-        addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/sum.ts" }
+        variable: { filePath: "@arrowagents/varible" },
+        addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/Sum/index.ts" },
+        setVariable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/SetVariable/index.ts" }
     }
     /*** BFS to traverse from Starting Nodes to Ending Node ***/
     const flowNodes = await flow.processConnectedDataNodes(startingNodeIds, subgraph.nodes, subgraph.edges, graph, depthQueue, componentNodes, "", [], "chatId", "sessionId" ?? '', subgraph.id, {}, executionState);
@@ -77,12 +87,18 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
     nodeToExecute = endingNodeIds.length === 1 ? flowNodes.find((node: any) => endingNodeIds[0] === node.id) : flowNodes[flowNodes.length - 1]
     if (!nodeToExecute) return new Error("Node not found")
     const reactFlowNodeData: any = flow.resolveVariables(nodeToExecute.data, flowNodes, "", []);
+  
     let nodeToExecuteData: any = reactFlowNodeData;
-    console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
+    // console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
+    // console.log("node is ",nodeToExecuteData.name)
     const nodeInstanceFilePath = componentNodes[nodeToExecuteData.name].filePath as string
     const nodeModule = await import(nodeInstanceFilePath)
     const nodeInstance = new nodeModule.nodeClass();
     subscribeOutputControlNode()
+    // console.log(reactFlowNodeData)
+    // console.log(nodeToExecuteData);
+    if (nodeToExecute.id == 'addnumbers1')
+        return
     let result = await nodeInstance.run(nodeToExecuteData, "", executionState);
     // console.log("final result", result);
     return result;
@@ -96,10 +112,10 @@ const subscribeOutputControlNode = () => {
             // Handle the emitted value from the output control node
             console.log('Received value from output control node:', output.outputcontrolPinId,);
             // return;
-            // let currentNode =flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
-            // console.log("nex node to execute",currentNode.id)
+            let currentNode =flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
+            console.log("current Node Id",currentNode.id)
             // return
-            // await this.iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
+            await iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
         },
         error: (err: any) => {
             // Handle any errors that occur during the subscription
@@ -114,3 +130,9 @@ const subscribeOutputControlNode = () => {
     // Store the subscription somewhere if you need to unsubscribe later
     // context.subscriptions.push(subscription);
 }
+
+var workflow = require('./../../agentserver/datajson/controlflowTest.json');
+
+ execute(workflow).then((result) => {
+     console.log(result)
+ })

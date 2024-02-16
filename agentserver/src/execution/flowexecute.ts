@@ -35,9 +35,9 @@ export class FlowExecuteHandler {
             throw new Error('No main function found');
         }
         else {
-            console.log(mainFunction);
+            // console.log(mainFunction);
             let currentNode: INode = mainFunction.flow.nodes.find((node: any) => node.data.name === 'Start');
-            console.log(currentNode)
+            // console.log(currentNode)
             return await this.iterateGraph(mainFunction.flow, currentNode, executionState, 'default');
         }
 
@@ -46,14 +46,16 @@ export class FlowExecuteHandler {
     async iterateGraph(flow: Flow, currentNode: INode, executionState: FlowState, outputcontrolName: string = "default") {
         try {
             let nodeToExecute: INode | null = flow.getNextControlNode(currentNode.id, outputcontrolName);
-            console.log(nodeToExecute)
-            if (nodeToExecute!=null) {
+            // console.log("current node", nodeToExecute)
+
+            // console.log("next control node to execute",nodeToExecute?.id)
+            if (nodeToExecute != null) {
                 let result = await this.executeControlNode(flow, nodeToExecute, executionState);
                 return result;
 
             }
-            else{
-                console.log("no control node found after current node after",outputcontrolName)
+            else {
+                console.log("no control node found after current node after",currentNode.id, outputcontrolName)
             }
         } catch (error) {
             console.log(error)
@@ -61,13 +63,20 @@ export class FlowExecuteHandler {
 
     }
     async executeControlNode(flow: Flow, nodeToExecute: INode, executionState: FlowState) {
-        executionState.flow=flow
+        executionState.flow = flow
         executionState.currentNodeId = nodeToExecute.id;
+        // console.log(executionState.currentNodeId)
         let subgraph: Flow = flow.getSubGraphOfAllConnectedDataNodes(nodeToExecute.id);
+
+        subgraph = flow.removeConnectedNodesWithInputControls(subgraph, nodeToExecute.id);
+        console.log("subgraph of current control node", subgraph)
+
+        // return
         // Logic From Flowise as now subgraph is same sa Flowise flow  
         const { graph, nodeDependencies } = flow.constructGraphs(subgraph.nodes, subgraph.edges);
         const directedGraph = graph
         const endingNodeIds = flow.getEndingNodes(nodeDependencies, directedGraph);
+
         //console.log("ending node id", endingNodeIds)
         if (!endingNodeIds.length) return (`Ending nodes not found`);
         const endingNodes = subgraph.nodes.filter((nd: any) => endingNodeIds.includes(nd.id));
@@ -82,11 +91,16 @@ export class FlowExecuteHandler {
             depthQueue = Object.assign(depthQueue, res.depthQueue)
         }
         startingNodeIds = [...new Set(startingNodeIds)]
+        // console.log(endingNodeIds)
+
         const startingNodes = subgraph.nodes.filter((nd: any) => startingNodeIds.includes(nd.id));
-        // console.log(startingNodes)
+
+        // console.log(startingNodes);
+
         let componentNodes: any = {
             variable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/NumberVariable/index.ts" },
-            addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/Sum/index.ts" }
+            addnumbers: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/Sum/index.ts" },
+            setVariable: { filePath: "/Users/ravirawat/Documents/ArrowAgents/nodes/SetVariable/index.ts" }
         }
         /*** BFS to traverse from Starting Nodes to Ending Node ***/
         const flowNodes = await flow.processConnectedDataNodes(startingNodeIds, subgraph.nodes, subgraph.edges, graph, depthQueue, componentNodes, "", [], "chatId", "sessionId" ?? '', subgraph.id, {}, executionState);
@@ -94,15 +108,22 @@ export class FlowExecuteHandler {
         nodeToExecute = endingNodeIds.length === 1 ? flowNodes.find((node: any) => endingNodeIds[0] === node.id) : flowNodes[flowNodes.length - 1]
         if (!nodeToExecute) return new Error("Node not found")
         const reactFlowNodeData: any = flow.resolveVariables(nodeToExecute.data, flowNodes, "", []);
+      
         let nodeToExecuteData: any = reactFlowNodeData;
-        console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
+        // console.log(`[server]: Running ${nodeToExecuteData.label} (${nodeToExecuteData.id})`)
+        // console.log("node is ",nodeToExecuteData.name)
         const nodeInstanceFilePath = componentNodes[nodeToExecuteData.name].filePath as string
         const nodeModule = await import(nodeInstanceFilePath)
         const nodeInstance = new nodeModule.nodeClass();
         this.subscribeOutputControlNode()
+        // console.log(reactFlowNodeData)
+        // console.log(nodeToExecuteData);
+        console.log(nodeToExecute.id)
+        if (nodeToExecute.id == 'addnumbers1')
+            return
         let result = await nodeInstance.run(nodeToExecuteData, "", executionState);
         // console.log("final result", result);
-        return result;
+        // return result;
     }
     async executeDataGraph() {
 
@@ -114,9 +135,10 @@ export class FlowExecuteHandler {
             next: async (output: OutputControlObservableValue) => {
                 let flow = output.flowState.flow;
                 // Handle the emitted value from the output control node
-                console.log('Received value from output control node:', output.outputcontrolPinId,);
-                let currentNode =flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
-                console.log("next node to execute",currentNode.id)
+                console.log('Received value from output control node:', output.outputcontrolPinId,output.flowState.currentNodeId);
+                let currentNode = flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
+                console.log("current node is", currentNode.id)
+                // return;
                 await this.iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
             },
             error: (err) => {
@@ -181,3 +203,4 @@ export class FlowExecuteHandler {
 
 
 }
+

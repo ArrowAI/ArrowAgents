@@ -3,3 +3,5 @@ dist
 .venv
 .env
 aigeneration/data
+engine.zip  
+execution

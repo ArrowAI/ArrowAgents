@@ -1,0 +1,78 @@
+{
+    "nodes": [
+        {
+            "id": "variable0",
+            "data": {
+                "name": "variable",
+                "label": "Variable",
+                "inputs": [
+                    {
+                        "id": "variable0-input0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number",
+                        "additionalParams": true
+                    }
+                ],
+                "outputs": [
+                    {
+                        "id": "variable0-output0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number"
+                    }
+                ],
+                "inputData": {
+                    "number": 2
+                },
+                "outputControls": []
+            }
+        },
+        {
+            "id": "variable1",
+            "data": {
+                "name": "variable",
+                "label": "Variable",
+                "inputs": [
+                    {
+                        "id": "variable1-input0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number",
+                        "additionalParams": true
+                    }
+                ],
+                "outputs": [
+                    {
+                        "id": "variable1-output0",
+                        "name": "number",
+                        "label": "number",
+                        "type": "number"
+                    }
+                ],
+                "inputData": {
+                    "number": 3
+                },
+                "outputControls": []
+            }
+        }
+    ],
+    "edges": [
+        {
+            "source": "variable0",
+            "sourceHandle": "variable1-output0",
+            "target": "addnumbers0",
+            "targetHandle": "addnumbers-input0-addnumbers-number",
+            "type": "buttonedge",
+            "id": "start0-addnumbers0-input-control-default"
+        },
+        {
+            "source": "variable1",
+            "sourceHandle": "start0-output-control-default",
+            "target": "addnumbers0",
+            "targetHandle": "addnumbers-input1-addnumbers-number",
+            "type": "buttonedge",
+            "id": "start0-addTwoNumbers0-input-default"
+        }
+    ]
+}
