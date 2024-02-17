@@ -19,8 +19,11 @@ const writeToJsonFile = async (filePath: string, obj: unknown) => {
 export function getOutputControlObservable(): Subject<any> {
     return subject
 }
-export const execute = async (json: any) => {
+export const execute = async () => {
     //
+    let importNode="node:process"
+    let  { argv } = await import(importNode);
+    let json = JSON.parse(argv[2]);
     let jsonResponse = await startActivity(json, {
         context: {}, currentNodeId: '',
         flowId: "",
@@ -123,11 +126,10 @@ const executeControlNode = async (flow: Flow, nodeToExecute: INode, executionSta
     // console.log(nodeToExecuteData);
 
     executionState.context.OutputControlObservable = getOutputControlObservable()
-    if (nodeToExecute.id == 'addnumbers1')
-        return nodeToExecuteData
+   
     let result = await nodeInstance.run(nodeToExecuteData, "", executionState);
     // console.log("final result", result);
-    return nodeToExecuteData;
+    return  result.context;
 }
 
 const subscribeOutputControlNode = () => {
@@ -141,6 +143,7 @@ const subscribeOutputControlNode = () => {
             let currentNode = flow.nodes.find((node: any) => node.id === output.flowState.currentNodeId);
             console.log("current Node Id", currentNode.id)
             // return
+            subscription.unsubscribe();
             await iterateGraph(flow, currentNode, output.flowState, output.outputcontrolPinId);
         },
         error: (err: any) => {
@@ -150,6 +153,7 @@ const subscribeOutputControlNode = () => {
         complete: () => {
             // Handle completion of the observable stream
             console.log('Output control node completed');
+           
         }
     });
 
@@ -157,10 +161,5 @@ const subscribeOutputControlNode = () => {
     // context.subscriptions.push(subscription);
 }
 
-// execute({})
-
-var workflow = require('./../../../agentserver/datajson/controlflowTest.json');
-
-execute(workflow).then((result) => {
-    console.log(result)
-})
+execute()
+    .catch(e => console.error(e))
