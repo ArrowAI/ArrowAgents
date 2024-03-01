@@ -1,0 +1,90 @@
+{
+    "id": "Z2MHqfkXOdajJVsgqKnUv",
+    "created": "2024-02-02T00:24:57.775Z",
+    "updated": "2024-02-02T00:24:57.775Z",
+    "name": "@activepieces/piece-github",
+    "displayName": "GitHub",
+    "logoUrl": "https://cdn.activepieces.com/pieces/github.png",
+    "description": "",
+    "projectId": null,
+    "platformId": null,
+    "version": "0.3.6",
+    "minimumSupportedRelease": "0.5.0",
+    "maximumSupportedRelease": "99999.99999.9999",
+    "auth": {
+        "required": true,
+        "authUrl": "https://github.com/login/oauth/authorize",
+        "tokenUrl": "https://github.com/login/oauth/access_token",
+        "scope": [
+            "admin:repo_hook",
+            "admin:org",
+            "repo"
+        ],
+        "type": "OAUTH2",
+        "displayName": "Connection"
+    },
+    "actions": {
+        "github_create_issue": {
+            "name": "github_create_issue",
+            "displayName": "Create Issue",
+            "description": "Create Issue in Github Repository",
+            "props": {
+                "repository": {
+                    "displayName": "Repository",
+                    "dependsOn": [],
+                    "required": true,
+                    "type": "DROPDOWN"
+                },
+                "title": {
+                    "displayName": "Title",
+                    "description": "The title of the issue",
+                    "required": true,
+                    "type": "SHORT_TEXT",
+                    "defaultProcessors": [
+                        null
+                    ],
+                    "defaultValidators": [
+                        {
+                            "type": "STRING"
+                        }
+                    ]
+                },
+                "description": {
+                    "displayName": "Description",
+                    "description": "The discription of the issue",
+                    "required": false,
+                    "type": "LONG_TEXT"
+                },
+                "labels": {
+                    "displayName": "Labels",
+                    "description": "Labels for the Issue",
+                    "dependsOn": [
+                        "repository"
+                    ],
+                    "required": false,
+                    "type": "MULTI_SELECT_DROPDOWN"
+                },
+                "assignees": {
+                    "displayName": "Assignees",
+                    "description": "Assignees for the Issue",
+                    "dependsOn": [
+                        "repository"
+                    ],
+                    "required": false,
+                    "type": "MULTI_SELECT_DROPDOWN"
+                }
+            },
+            "requireAuth": true
+        }
+       
+    },
+    "triggers": {
+    
+    },
+    "pieceType": "OFFICIAL",
+    "categories": [
+        "DEVELOPER_TOOLS"
+    ],
+    "packageType": "REGISTRY",
+    "archiveId": null
+}

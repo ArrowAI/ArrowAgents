@@ -1,0 +1,34 @@
+{
+    "actions": {
+        "example_issue": {
+            "props": {
+                "name": "owner",
+                "label": "Owner",
+                "required": true,
+                "type": "options"
+            },
+            "executor": true
+        }
+    },
+    "triggers": {
+        "exampleTrigger": {
+            "props": {
+                "label": "Webhook URL",
+                "name": "webhookUrl",
+                "type": "string",
+                "description": "The URL for the Example webhook"
+            }
+        }
+    },
+    "auth": {
+        "type": "OAUTH2",
+        "required": true,
+        "authUrl": "https://example.com/login/oauth/authorize",
+        "tokenUrl": "https://example.com/login/oauth/access_token",
+        "scope": [
+            "admin:repo_hook",
+            "admin:org",
+            "repo"
+        ]
+    }
+}

@@ -1,0 +1,74 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "# ArrowAI Module Structure"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "const ExampleAction = {\n    name: 'ExampleAction',\n    displayName: 'Example Action',\n    description: 'This is a Example action',\n    props: [\n      {\n        label: 'Repository Name',\n        name: 'repoName',\n        type: 'options',\n        description: 'The name of the GitHub repository',\n        options: async ({ auth }) => {\n          if (!auth) {\n            return {\n              disabled: true,\n              options: [],\n              placeholder: 'please authenticate first',\n            };\n          }\n          const authProp = auth\n          const repositories = await getUserRepo(authProp);\n          return {\n            disabled: false,\n            options: repositories.map((repo) => {\n              return {\n                label: \"repo.owner.login + '/' + repo.name\",\n                value: {\n                  owner: \"repo.owner.login\",\n                  repo: \"repo.name\",\n                },\n              };\n            }),\n          };\n        },\n      },\n      {\n        label: 'Owner',\n        name: 'owner',\n        type: 'string',\n        description: 'The owner of the GitHub repository',\n      },\n    ],\n    outputs: [],\n    controlInputs: [],\n    controlOutputs: [],\n    run: async () => {\n      // Implement the action logic here\n      return 'Action Result';\n    },\n    requireAuth: true,\n  };\n  \n  const ExampleTrigger = {\n    name: 'exampleTrigger',\n    displayName: 'Example Trigger',\n    description: 'This is a Example trigger',\n    props: [\n      {\n        label: 'Webhook URL',\n        name: 'webhookUrl',\n        type: 'string',\n        description: 'The URL for the Example webhook',\n      },\n    ],\n    type: 'WEBHOOK',\n    handshakeConfiguration: {\n      strategy: 'NONE',\n    },\n    onEnable: async () => {\n      // Implement the trigger enable logic here\n    },\n    onHandshake: async () => {\n      // Implement the handshake logic here\n      return { status: 200 };\n    },\n    onDisable: async () => {\n      // Implement the trigger disable logic here\n    },\n    run: async () => {\n      // Implement the trigger run logic here\n      return 'Trigger Result';\n    },\n    test: async () => {\n      // Implement the trigger test logic here\n      return 'Trigger Test Result';\n    },\n    sampleData: {},\n    requireAuth: true,\n  };\n  \n  const ExampleNode = {\n  \n    actions: {\n      example_issue: ExampleAction,\n    },\n    triggers: {\n      exampleTrigger: ExampleTrigger,\n    },\n    auth: {\n      type: 'OAUTH2',\n      required: true,\n      authUrl: 'https://example.com/login/oauth/authorize',\n      tokenUrl: 'https://example.com/login/oauth/access_token',\n      scope: ['admin:repo_hook', 'admin:org', 'repo'],\n    }\n  };\n  \n  \n  const getUserRepo = (authProp) => {\n    return []\n  }\n  \n  module.exports = {\n    nodeClass: ExampleNode\n  }"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "@action({\n    \"name\": \"Add Node\",\n    \"inputdata\": [\"number\", \"number\"],\n    \"outputdata\": [\"sum\"],\n    \"inputControl\": [\"default\"],\n    \"outputControl\": [\"default\"]\n    \"props\": []\n})\nclass ExampleAction{\n\n    @propertyGet({\n        \"name\": \"RepoName\",\n        \"label\": \"Repo Name\",\n        \"type\": \"options\"\n    })\n    reponame: async (auth, input ) => {\n        if (!auth) {\n          return {\n            disabled: true,\n            options: [],\n            placeholder: 'please authenticate first',\n          };\n        }\n        const authProp = auth\n        const repositories = await getUserRepo(authProp);\n        return {\n          disabled: false,\n          options: repositories.map((repo) => {\n            return {\n              label: \"repo.owner.login + '/' + repo.name\",\n              value: {\n                owner: \"repo.owner.login\",\n                repo: \"repo.name\",\n              },\n            };\n          }),\n        };\n    }\n\n    @property({\n        \"name\": \"owner\",\n        \"label\": \"Repo Name\",\n        \"type\": \"options\"\n    })\n    owner: async ({ auth }) => {\n        if (!auth) {\n          return {\n            disabled: true,\n            options: [],\n            placeholder: 'please authenticate first',\n          };\n        }\n        const authProp = auth\n        const repositories = await getUserRepo(authProp);\n        return {\n          disabled: false,\n          options: repositories.map((repo) => {\n            return {\n              label: \"repo.owner.login + '/' + repo.name\",\n              value: {\n                owner: \"repo.owner.login\",\n                repo: \"repo.name\",\n              },\n            };\n          }),\n        };\n    },\n    \n\n    @executor()\n    run: (context, inputData) => {\n        let outputval = {\n            \"sum\":inputData.input[1]+inputData.input[2]\n        }\n        context.triggerControlOutput(\"default\", outputval)\n        //If no Control Output then simple Return outputval\n    };\n}\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "# After Compile"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "@action({\n    \"name\": \"Add Node\",\n    \"inputdata\": [\"number\", \"number\"],\n    \"outputdata\": [\"sum\"],\n    \"inputControl\": [\"default\"],\n    \"outputControl\": [\"default\"]\n})\nclass ExampleAction{\n\n    @property({\n        \"name\": \"RepoName\",\n        \"label\": \"Repo Name\",\n        \"type\": \"options\"\n    })\n    reponame: async ({ auth }) => {\n        if (!auth) {\n          return {\n            disabled: true,\n            options: [],\n            placeholder: 'please authenticate first',\n          };\n        }\n        const authProp = auth\n        const repositories = await getUserRepo(authProp);\n        return {\n          disabled: false,\n          options: repositories.map((repo) => {\n            return {\n              label: \"repo.owner.login + '/' + repo.name\",\n              value: {\n                owner: \"repo.owner.login\",\n                repo: \"repo.name\",\n              },\n            };\n          }),\n        };\n    }\n\n    @property({\n        \"name\": \"owner\",\n        \"label\": \"Repo Name\",\n        \"type\": \"options\"\n    })\n    owner: async ({ auth }) => {\n        if (!auth) {\n          return {\n            disabled: true,\n            options: [],\n            placeholder: 'please authenticate first',\n          };\n        }\n        const authProp = auth\n        const repositories = await getUserRepo(authProp);\n        return {\n          disabled: false,\n          options: repositories.map((repo) => {\n            return {\n              label: \"repo.owner.login + '/' + repo.name\",\n              value: {\n                owner: \"repo.owner.login\",\n                repo: \"repo.name\",\n              },\n            };\n          }),\n        };\n    },\n    \n\n    @executor()\n    run: (context, inputData) => {\n        let outputval = {\n            \"sum\":inputData.input[1]+inputData.input[2]\n        }\n        context.triggerControlOutput(\"default\", outputval)\n        //If no Control Output then simple Return outputval\n    };\n}\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                "# Updated Structure including Decorators"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "@action({\n    name: \"ExampleAction\",\n    description: \"Example action\",\n})\nclass ExampleAction{\n\n    @parameter(\"\")\n    public name: string;\n}"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "class ExampleAction{\n    \n    public run(\n        InputData: object,\n        FlowContext: object): object{\n        \n    }\n}"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "markdown",
+            "source": [
+                ""
+            ],
+            "outputs": []
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "type inputData = {\n    input: [object];\n    inputControlCalled: string;\n};\n\ntype Context = {\n    triggerControlOutput: object;\n    previousNodeData: object;\n};"
+            ],
+            "outputs": []
+        }
+    ]
+}
